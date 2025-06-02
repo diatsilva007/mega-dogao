@@ -808,6 +808,10 @@ video {
   margin-top: 2.5rem;
 }
 
+.mt-auto {
+  margin-top: auto;
+}
+
 .box-border {
   box-sizing: border-box;
 }
