@@ -9,24 +9,44 @@ const addressInput = document.getElementById("address");
 const addressWarn = document.getElementById("address-warn");
 const observationsInput = document.getElementById("observations"); // Novo campo
 
+const WHATSAPP_PHONE_NUMBER = "+5535997714779"; // Número de WhatsApp para o pedido
+
 let cart = [];
+let lastFocusedElement; // Para restaurar o foco ao fechar o modal
+
+// Função para fechar o modal do carrinho e restaurar o foco
+function closeCartModal() {
+  cartModal.style.display = "none";
+  if (lastFocusedElement) {
+    lastFocusedElement.focus();
+  }
+}
 
 // Abrir o modal do carrinho
 cartBtn.addEventListener("click", function () {
+  lastFocusedElement = document.activeElement; // Salva o elemento que tinha foco
   updatecartModal();
   cartModal.style.display = "flex";
+  closeModalBtn.focus(); // Move o foco para o botão de fechar dentro do modal
 });
 
 // Fechar o modal quando clicar fora
 cartModal.addEventListener("click", function (event) {
   if (event.target === cartModal) {
-    cartModal.style.display = "none";
+    closeCartModal();
   }
 });
 
 // Fechar o modal quando clicar no botão fechar
 closeModalBtn.addEventListener("click", function () {
-  cartModal.style.display = "none";
+  closeCartModal();
+});
+
+// Fechar o modal com a tecla Escape
+window.addEventListener("keydown", function (event) {
+  if (event.key === "Escape" && cartModal.style.display === "flex") {
+    closeCartModal();
+  }
 });
 
 // Adicionar item ao carrinho ao clicar no botão
@@ -263,11 +283,10 @@ checkoutBtn.addEventListener("click", function () {
   const message = encodeURIComponent(
     `Olá, gostaria de fazer o seguinte pedido:\n${cartItemsText}\n\nTotal: R$${totalPedido.toFixed(2)}\n\nEndereço de entrega: ${addressInput.value}${clientObservations ? `\n\nObservações: ${clientObservations}` : ""}`
   );
-  const phone = "+5535997714779"; // Substitua pelo seu número de WhatsApp
 
   window.open(
-    `https://wa.me/${phone}?text=${message}`,
-    "_blank"
+    `https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${message}`,
+    "_blank", "noopener noreferrer" // Adicionado rel="noopener noreferrer" por segurança
   );
 
   cart = [];
@@ -280,10 +299,10 @@ checkoutBtn.addEventListener("click", function () {
 function checkRestaurantOpen() {
   const data = new Date();
   const hora = data.getHours();
-  return hora >= 18 && hora < 22; // Aberto das 18:00 às 21:59
+  return hora >= 16 && hora < 22; // Aberto das 18:00 às 21:59
 }
 
-const spanItem = document.getElementById("date-span");
+const spanItem = document.getElementById("date-span"); // Se você alterou o ID no HTML para "status-funcionamento", atualize aqui também.
 const isOpen = checkRestaurantOpen();
 
 if (isOpen) {
