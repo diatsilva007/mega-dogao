@@ -1,43 +1,44 @@
 <!DOCTYPE html>
-<html lang="en" Lang="pt-br">
+<html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=h1, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap" 
-    rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" 
-    integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" 
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+        integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Meta tag de OG (Open Graph) -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Dev Burguer - O melhor hamburguer dev">
-    <meta property="og:image" content="https://projeto-cardapio-zeta.vercel.app/assets/hamb-1.png">
-    <meta property="og:description" content="O melhor hamburguer caseiro de verdade!">
-    <meta property="og:site_name" content="DevBurguer">
+    <meta property="og:title" content="Mega Dogão - O melhor da cidade!">
+    <meta property="og:image" content="./assets/hamb-1.png"> <!-- Considere usar uma URL absoluta se hospedado -->
+    <meta property="og:description" content="Experimente os lanches deliciosos do Mega Dogão!">
+    <meta property="og:site_name" content="Mega Dogão">
 
-    <link rel="stylesheet" href="./styles/output.css">  
+    <link rel="stylesheet" href="./styles/output.css">
 
-    <title>Dev Burguer - A melhor hamburgueria dev</title>
+    <title>Mega Dogão - O melhor da cidade!</title>
 
 </head>
 
 <body>
-    
+
     <!-- HEADER -->
     <header class="w-full h-[420px] bg-zinc-900 bg-home bg-cover bg-center">
 
         <div class="w-full h-full flex flex-col justify-center items-center">
 
-            <img src="./assets/hamb-1.png" 
-            alt="logo Dev Burguer"
-            class="w-32 h-32 rounded-full shadow-lg hover:scale-110 duration-200">
+        <img src="./assets/hamb-1.png" alt="Logo Mega Dogão"
+                class="w-32 h-32 rounded-full shadow-lg hover:scale-110 duration-200">
 
             <h1 class="text-4xl mt-4 mb-2 font-bold text-white">Mega Dogão</h1>
 
@@ -52,189 +53,199 @@
     </header>
     <!-- FIM DO HEADER -->
 
-        <h2 class="text-2xl md:text-3xl font-bold text-center mt-9 mb-6">
-            Conheça nosso menu
-        </h2>
+    <h2 class="text-2xl md:text-3xl font-bold text-center mt-12 mb-8">
+        Conheça nosso menu
+    </h2>
 
     <!-- Início menu -->
-        <div id="menu">
+    <div id="menu">
 
-            <main class="grid grid-cols-1 md:grid-cols-2 gap-7 mx-auto max-w-7xl px-2 mb-16">
+        <main class="grid grid-cols-1 md:grid-cols-2 gap-7 mx-auto max-w-7xl px-2 mb-12">
 
-                <!-- Produto ítem -->
-                <div class="flex gap-2">
-                    <img src="./assets/hamb-8.png" 
-                    alt="Hamburguer Smash" 
+            <!-- Produto ítem -->
+            <div class="flex gap-2">
+                <img src="./assets/hamb-8.png" alt="Hamburguer Smash"
                     class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300">
 
                 <div>
                     <p class="font-bold">Hamburguer Smash</p>
-                    <p class="text-sm ">Pão levinho de fermentação natural da Trigou, 
-                           burger 160g, queijo prato e maionese da casa.</p>
+                    <p class="text-sm ">Pão levinho de fermentação natural da Trigou,
+                        burger 160g, queijo prato e maionese da casa.</p>
 
                     <div class="flex items-center gap-2 justify-between mt-3">
                         <p class="font-bold text-lg">R$ 28.90</p>
-                        <button class="bg-gray-900 px-5 rounded add-to-cart-btn"
-                                data-name="Hamburguer Smash"
-                                data-price="28.90"
-                        >
+                        <button class="bg-gray-900 px-5 rounded add-to-cart-btn" data-name="Hamburguer Smash"
+                            data-price="28.90">
                             <i class="fa fa-cart-plus text-lg text-white"></i>
                         </button>
                     </div>
 
                 </div>
 
-                </div>
-                <!-- Fim Produto ítem -->    
+            </div>
+            <!-- Fim Produto ítem -->
 
-                <!-- Produto ítem -->
-                <div class="flex gap-2">
-                    <img src="./assets/hamb-2.png" 
-                    alt="Hamburguer Duplo" 
+            <!-- Produto ítem -->
+            <div class="flex gap-2">
+                <img src="./assets/hamb-2.png" alt="Hamburguer Duplo"
                     class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300">
 
                 <div>
                     <p class="font-bold">Hamburguer Duplo</p>
-                    <p class="text-sm ">Pão levinho de fermentação natural da Trigou, 
-                           burger 160g, queijo prato e maionese da casa.</p>
+                    <p class="text-sm ">Pão levinho de fermentação natural da Trigou,
+                        burger 160g, queijo prato e maionese da casa.</p>
 
                     <div class="flex items-center gap-2 justify-between mt-3">
                         <p class="font-bold text-lg">R$ 32.90</p>
-                        <button class="bg-gray-900 px-5 rounded add-to-cart-btn"
-                                data-name="Hamburguer Duplo"
-                                data-price="32.90"
-                        >
-                            <i class="fa fa-cart-plus text-lg text-white"></i> 
+                        <button class="bg-gray-900 px-5 rounded add-to-cart-btn" data-name="Hamburguer Duplo"
+                            data-price="32.90">
+                            <i class="fa fa-cart-plus text-lg text-white"></i>
                         </button>
                     </div>
 
                 </div>
 
-                </div>
-                <!-- Fim Produto ítem -->    
+            </div>
+            <!-- Fim Produto ítem -->
 
-                <!-- Produto ítem -->
-                <div class="flex gap-2">
-                    <img src="./assets/hamb-4.png" 
-                    alt="Hamburguer da Casa" 
+            <!-- Produto ítem -->
+            <div class="flex gap-2">
+                <img src="./assets/hamb-4.png" alt="Hamburguer da Casa"
                     class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300">
 
                 <div>
                     <p class="font-bold">Hamburguer Saled</p>
-                    <p class="text-sm ">Pão levinho de fermentação natural da Trigou, 
-                           burger 160g, queijo prato e maionese da casa.</p>
+                    <p class="text-sm ">Pão levinho de fermentação natural da Trigou,
+                        burger 160g, queijo prato e maionese da casa.</p>
 
                     <div class="flex items-center gap-2 justify-between mt-3">
                         <p class="font-bold text-lg">R$ 26.90</p>
-                        <button class="bg-gray-900 px-5 rounded add-to-cart-btn"
-                                data-name="Hamburguer Saled"
-                                data-price="26.90"
-                        >
-                            <i class="fa fa-cart-plus text-lg text-white"></i> 
+                        <button class="bg-gray-900 px-5 rounded add-to-cart-btn" data-name="Hamburguer Saled"
+                            data-price="26.90">
+                            <i class="fa fa-cart-plus text-lg text-white"></i>
                         </button>
                     </div>
 
                 </div>
 
-                </div>
-                <!-- Fim Produto ítem -->
+            </div>
+            <!-- Fim Produto ítem -->
 
-                <!-- Produto ítem -->
-                <div class="flex gap-2">
-                    <img src="./assets/hamb-3.png" 
-                    alt="Hamburguer da Saled" 
+            <!-- Produto ítem -->
+            <div class="flex gap-2">
+                <img src="./assets/hamb-3.png" alt="Hamburguer da Saled"
                     class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300">
 
                 <div>
                     <p class="font-bold">Hamburguer da Casa</p>
-                    <p class="text-sm ">Pão levinho de fermentação natural da Trigou, 
-                           burger 160g, queijo prato e maionese da casa.</p>
+                    <p class="text-sm ">Pão levinho de fermentação natural da Trigou,
+                        burger 160g, queijo prato e maionese da casa.</p>
 
                     <div class="flex items-center gap-2 justify-between mt-3">
                         <p class="font-bold text-lg">R$ 27.90</p>
-                        <button class="bg-gray-900 px-5 rounded add-to-cart-btn"
-                                data-name="Hamburguer da Casa"
-                                data-price="28.90"
-                        >
-                            <i class="fa fa-cart-plus text-lg text-white"></i> 
+                        <button class="bg-gray-900 px-5 rounded add-to-cart-btn" data-name="Hamburguer da Casa"
+                            data-price="28.90">
+                            <i class="fa fa-cart-plus text-lg text-white"></i>
                         </button>
                     </div>
 
                 </div>
 
-                </div>
-                <!-- Fim Produto ítem -->
-
-            </main>
-
-            <div class="mx-auto max-w-7xl px-2 my-2">
-                <h2 class="font-bold text-3xl">
-                    Bebidas
-                </h2>
             </div>
+            <!-- Fim Produto ítem -->
 
-            <!-- Grid Bebidas -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-7 mx-auto max-w-7xl px-2 mb-16" id="menu">
+        </main>
+
+        <div class="mx-auto max-w-7xl px-2">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-8">
+                Bebidas
+            </h2>
+        </div>
+
+        <!-- Grid Bebidas -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-7 mx-auto max-w-7xl px-2 mb-12" id="menu-bebidas">
 
             <!-- Bebida ítem -->
             <div class="flex gap-2 w-full">
-                <img src="./assets/refri-1.png" 
-                alt="Coca lata" 
-                class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300">  
+                <img src="./assets/refri-1.png" alt="Coca lata"
+                    class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300">
 
-            <div class="w-full">
-                <p class="font-bold">Coca lata 350ml</p>
+                <div class="w-full">
+                    <p class="font-bold">Coca lata 350ml</p>
 
-                <div class="flex items-center gap-2 justify-between mt-3">
-                    <p class="font-bold text-lg">R$ 6</p>
-                    <button class="bg-gray-900 px-5 rounded add-to-cart-btn"
-                            data-name="Coca lata"
-                            data-price="6"
-                    >
-                        <i class="fa fa-cart-plus text-lg text-white"></i> 
-                    </button>
+                    <div class="flex items-center gap-2 justify-between mt-3">
+                        <p class="font-bold text-lg">R$ 6</p>
+                        <button class="bg-gray-900 px-5 rounded add-to-cart-btn" data-name="Coca lata" data-price="6">
+                            <i class="fa fa-cart-plus text-lg text-white"></i>
+                        </button>
+                    </div>
+
                 </div>
-
-            </div>
 
             </div>
             <!-- Fim Bebida ítem -->
 
             <!-- Bebida ítem -->
             <div class="flex gap-2 w-full">
-                <img src="./assets/refri-2.png" 
-                alt="Guaraná lata" 
-                class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300">  
+                <img src="./assets/refri-2.png" alt="Guaraná lata"
+                    class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300">
 
-            <div class="w-full">
-                <p class="font-bold">Guaraná lata 350ml</p>
+                <div class="w-full">
+                    <p class="font-bold">Guaraná lata 350ml</p>
 
-                <div class="flex items-center gap-2 justify-between mt-3">
-                    <p class="font-bold text-lg">R$ 6</p>
-                    <button class="bg-gray-900 px-5 rounded add-to-cart-btn"
-                            data-name="Guaraná lata"
-                            data-price="6"
-                    >
-                        <i class="fa fa-cart-plus text-lg text-white"></i> 
-                    </button>
+                    <div class="flex items-center gap-2 justify-between mt-3">
+                        <p class="font-bold text-lg">R$ 6</p>
+                        <button class="bg-gray-900 px-5 rounded add-to-cart-btn" data-name="Guaraná lata"
+                            data-price="6">
+                            <i class="fa fa-cart-plus text-lg text-white"></i>
+                        </button>
+                    </div>
+
                 </div>
-
-            </div>
 
             </div>
             <!-- Fim Bebida ítem -->
 
         </div>
-    <!-- Fim menu -->
+        <!-- Fim menu -->
 
-    <!-- Modal cart -->
-        <div 
-            class="bg-black/60 w-full h-full fixed top-0 left-0 z-[99] items-center justify-center hidden"
-            id="cart-modal"
-        
-        >
+        <!-- SEÇÃO ONDE ESTAMOS / MAPA -->
+        <div class="mx-auto max-w-7xl px-2 mt-12 py-10 mb-24">
+            <div class="flex flex-col items-center gap-y-10">
+                <h2 class="text-2xl md:text-3xl font-bold text-center">
+                    Onde nos encontrar
+                </h2>
 
-            <div class="bg-white p-5 rounded-md min-w-[90%] md:min-[600px]:">
+                <!-- Card estilizado para o mapa -->
+                <div class="w-full rounded-xl shadow-2xl overflow-hidden border border-gray-200">
+                    <div id="map-container" class="w-full h-[400px]">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3706.163534296712!2d-44.30380312288507!3d-21.73518489705589!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9f0c3edd04dfe1%3A0x4e71dd835cb39759!2sChrist%20the%20lookout!5e0!3m2!1sen!2sbr!4v1748825004575!5m2!1sen!2sbr" 
+                            width="100%" 
+                            height="100%" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-center gap-x-2">
+                    <i class="fas fa-map-marker-alt text-xl text-red-500"></i>
+                    <p class="text-lg font-medium">
+                        Rua Pará, Andrelândia - MG
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- FIM SEÇÃO ONDE ESTAMOS / MAPA -->
+
+        <!-- Modal cart -->
+        <div class="bg-black/60 w-full h-full fixed top-0 left-0 z-[99] items-center justify-center hidden"
+            id="cart-modal">
+
+            <div class="bg-white p-5 rounded-md min-w-[90%] md:min-w-[600px]">
                 <h2 class="text-center font-bold text-2xl mb-2">Meu carrinho</h2>
 
                 <div id="cart-items" class="flex justify-between mb-2 flex-col"></div>
@@ -242,12 +253,8 @@
                 <p class="font-bold">Total: <span id="cart-total">0.00</span></p>
 
                 <p class="font-bold mt-4">Endereço de entrega:</p>
-                <input 
-                    type="text"
-                    placeholder="Digite seu endereço completo..."
-                    id="address"
-                    class="w-full border-2 p-1 rounded my-1"
-                />
+                <input type="text" placeholder="Digite seu endereço completo..." id="address"
+                    class="w-full border-2 p-1 rounded my-1" />
 
                 <p class="text-red-500 hidden" id="address-warn">☝️ Digite seu endereço completo</p>
 
@@ -260,23 +267,20 @@
 
             </div>
         </div>
-    <!-- Fim Modal cart -->
+        <!-- Fim Modal cart -->
 
-    <!-- Button Cart Footer -->
+        <!-- Button Cart Footer -->
         <footer class="w-full bg-red-500 py-3 fixed bottom-0 z-40 flex items-center justify-center">
-            <button 
-                class="flex items-center gap-2 text-white font-bold"
-                id="cart-btn"
-                >
+            <button class="flex items-center gap-2 text-white font-bold" id="cart-btn">
                 (<span id="cart-count">0</span>)
                 Veja meu carrinho
                 <i class="fa fa-cart-plus text-lg text-white"></i>
             </button>
         </footer>
-    <!-- Fim Button Cart Footer -->
+        <!-- Fim Button Cart Footer -->
 
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-    <script src="script.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+        <script src="script.js"></script>
 </body>
 
 </html>
