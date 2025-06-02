@@ -298,30 +298,70 @@
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
         <script src="script.js"></script>
 
-        <footer class="w-full bg-zinc-900 text-gray-300 py-8 px-4 mt-20"> <!-- mt-20 para não sobrepor o footer fixo do carrinho -->
-            <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-center md:text-left gap-6">
-                <div>
-                    <h3 class="font-bold text-xl text-white mb-2">Mega Dogão</h3>
-                    <p class="text-sm">O melhor cachorro-quente da cidade!</p>
-                    <p class="text-sm mt-1">Rua Pará, Andrelândia - MG</p>
-                </div>
-                <div>
-                    <h4 class="font-semibold text-white mb-2">Horário de Funcionamento:</h4>
-                    <p class="text-sm">Segunda a Domingo: 18:00 - 22:00</p>
-                </div>
-                <div>
-                    <h4 class="font-semibold text-white mb-2">Siga-nos:</h4>
-                    <div class="flex gap-3 justify-center">
-                        <a href="#" target="_blank" aria-label="Instagram" class="hover:text-red-500"><i class="fab fa-instagram fa-2x"></i></a>
-                        <a href="#" target="_blank" aria-label="Facebook" class="hover:text-red-500"><i class="fab fa-facebook fa-2x"></i></a>
-                        <!-- Adicione mais redes sociais se necessário -->
+        <!-- FOOTER PRINCIPAL -->
+        <footer class="w-full bg-zinc-900 text-gray-400 pt-16 pb-8 px-4">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+                    <!-- Coluna 1: Sobre o Mega Dogão -->
+                    <div class="flex flex-col items-center sm:items-start text-center sm:text-left">
+                        <img src="./assets/mega-dogao2.jpg" alt="Logo Mega Dogão" class="w-24 h-24 rounded-full mb-4 shadow-md">
+                        <h3 class="font-bold text-xl text-white mb-2">Mega Dogão</h3>
+                        <p class="text-sm leading-relaxed mb-2">O melhor cachorro-quente da cidade, com ingredientes frescos e um sabor inconfundível!</p>
+                        <p class="text-sm"><i class="fas fa-map-marker-alt mr-2 text-red-500"></i>Rua Pará, Andrelândia - MG</p>
+                    </div>
+
+                    <!-- Coluna 2: Links Úteis -->
+                    <div>
+                        <h4 class="font-semibold text-lg text-white mb-4 text-center sm:text-left">Links Úteis</h4>
+                        <ul class="space-y-2 text-center sm:text-left">
+                            <li><a href="#menu-principal-titulo" class="hover:text-red-400 transition-colors duration-300 ease-in-out">Nosso Menu</a></li>
+                            <li><a href="#map-container" class="hover:text-red-400 transition-colors duration-300 ease-in-out">Onde Estamos</a></li>
+                            <!-- Você pode adicionar mais links aqui, como "Promoções" ou "Sobre Nós" -->
+                        </ul>
+                    </div>
+
+                    <!-- Coluna 3: Contato e Horários -->
+                    <div>
+                        <h4 class="font-semibold text-lg text-white mb-4 text-center sm:text-left">Contato & Horários</h4>
+                        <div class="text-center sm:text-left">
+                            <p class="text-sm mb-2 flex items-center justify-center sm:justify-start">
+                                <i class="fas fa-phone-alt mr-2 text-red-500"></i>
+                                <a href="tel:+5535997714779" class="hover:text-red-400 transition-colors duration-300 ease-in-out">(35) 99771-4779</a>
+                            </p>
+                            <p class="font-medium text-gray-200 mt-3 mb-1">Horário de Funcionamento:</p>
+                            <p class="text-sm">Segunda a Domingo</p>
+                            <p class="text-sm">18:00 às 01:00</p> <!-- Horário atualizado -->
+                        </div>
+                    </div>
+
+                    <!-- Coluna 4: Siga-nos -->
+                    <div>
+                        <h4 class="font-semibold text-lg text-white mb-4 text-center sm:text-left">Siga-nos</h4>
+                        <div class="flex space-x-4 justify-center sm:justify-start">
+                            <a href="#" target="_blank" aria-label="Instagram" class="text-gray-400 hover:text-red-400 transition-transform duration-300 ease-in-out transform hover:scale-110">
+                                <i class="fab fa-instagram fa-2x"></i>
+                            </a>
+                            <a href="#" target="_blank" aria-label="Facebook" class="text-gray-400 hover:text-red-400 transition-transform duration-300 ease-in-out transform hover:scale-110">
+                                <i class="fab fa-facebook fa-2x"></i>
+                            </a>
+                            <a href="https://wa.me/5535997714779" target="_blank" aria-label="WhatsApp" class="text-gray-400 hover:text-red-400 transition-transform duration-300 ease-in-out transform hover:scale-110">
+                                <i class="fab fa-whatsapp fa-2x"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="text-center text-xs mt-8 border-t border-gray-700 pt-4">
-                &copy; <span id="current-year"></span> Mega Dogão. Todos os direitos reservados.
+
+                <!-- Linha de Copyright e Desenvolvedor -->
+                <div class="border-t border-gray-700 pt-8 text-center">
+                    <p class="text-sm mb-2">&copy; <span id="current-year"></span> Mega Dogão. Todos os direitos reservados.</p>
+                    <p class="text-xs text-gray-500">
+                        Desenvolvido com <i class="fas fa-heart text-red-500 animate-pulse"></i> por
+                        <a href="https://www.linkedin.com/in/diogo-ataide-silva/" target="_blank" rel="noopener noreferrer" class="font-semibold text-gray-400 hover:text-red-400 transition-colors duration-300 ease-in-out">Diogo Ataide Silva</a>.
+                    </p>
+                </div>
             </div>
         </footer>
+        <!-- FIM FOOTER PRINCIPAL -->
 </body>
 
 </html>
