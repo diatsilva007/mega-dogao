@@ -295,28 +295,58 @@ checkoutBtn.addEventListener("click", function () {
   updatecartModal();
 });
 
-// Verificar a hora e manipular o card horário
+// Função para verificar se o restaurante está aberto (18:00 às 01:00 do dia seguinte)
 function checkRestaurantOpen() {
-  const data = new Date();
-  const hora = data.getHours();
-  return hora >= 16 && hora < 22; // Aberto das 18:00 às 21:59
+  const agora = new Date();
+  const horaAtual = agora.getHours();
+  // const diaDaSemana = agora.getDay(); // 0 = Domingo, 1 = Segunda, ..., 6 = Sábado
+                                      // Pode ser usado se houver dias específicos de fechamento
+
+  // Horário de funcionamento: 18:00 (inclusive) até 01:00 (exclusive) do dia seguinte
+  const horaAbertura = 18;  // 18:00
+  const horaFechamento = 1; // 01:00 da manhã (do dia seguinte)
+
+  // Se a hora atual for igual ou maior que a hora de abertura (ex: 18:00, 19:00 ... 23:00)
+  // OU se a hora atual for menor que a hora de fechamento (ex: 00:00, 00:30 - referente à janela que começou no dia anterior)
+  return horaAtual >= horaAbertura || horaAtual < horaFechamento;
 }
 
-const spanItem = document.getElementById("date-span"); // Se você alterou o ID no HTML para "status-funcionamento", atualize aqui também.
-const isOpen = checkRestaurantOpen();
+// Função para atualizar o status de funcionamento no header
+function atualizarStatusFuncionamentoHeader() {
+  const dateSpanElement = document.getElementById("date-span");
+  if (!dateSpanElement) {
+    console.warn("Elemento #date-span não encontrado no header.");
+    return;
+  }
+  const spanTextElement = dateSpanElement.querySelector("span");
+  const isOpen = checkRestaurantOpen();
 
-if (isOpen) {
-  spanItem.classList.remove("bg-red-500");
-  spanItem.classList.add("bg-green-600");
-  spanItem.querySelector("span").textContent = "Seg á Dom - 18:00 as 22:00 (Aberto)";
-} else {
-  spanItem.classList.remove("bg-green-600");
-  spanItem.classList.add("bg-red-500");
-  spanItem.querySelector("span").textContent = "Seg á Dom - 18:00 as 22:00 (Fechado)";
+  const horarioTextoBase = "Seg á Dom - 18:00 às 01:00";
+
+  if (isOpen) {
+    dateSpanElement.classList.remove("bg-red-500"); // Garante que a cor de fechado seja removida
+    dateSpanElement.classList.add("bg-green-600");
+    spanTextElement.textContent = `${horarioTextoBase} (Aberto)`;
+  } else {
+    dateSpanElement.classList.remove("bg-green-600"); // Garante que a cor de aberto seja removida
+    dateSpanElement.classList.add("bg-red-500");    // Adiciona classe para fechado (vermelho)
+    spanTextElement.textContent = `${horarioTextoBase} (Fechado)`;
+  }
 }
+
+
 
 // Adicionar ano corrente no rodapé
 const currentYearSpan = document.getElementById("current-year");
 if (currentYearSpan) {
     currentYearSpan.textContent = new Date().getFullYear();
 }
+
+// Chamar a atualização do status do header quando o DOM estiver carregado
+// e configurar para atualizar periodicamente (opcional)
+document.addEventListener('DOMContentLoaded', function() {
+    atualizarStatusFuncionamentoHeader(); // Chama na carga inicial
+
+    // Opcional: Atualizar o status periodicamente (ex: a cada minuto)
+    setInterval(atualizarStatusFuncionamentoHeader, 60000); // 60000 ms = 1 minuto
+});

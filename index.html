@@ -36,17 +36,17 @@
     <!-- HEADER -->
     <header class="w-full h-[420px] bg-zinc-900 bg-home bg-cover bg-center">
 
-        <div class="w-full h-full flex flex-col justify-center items-center">
+        <div class="w-full h-full flex flex-col justify-center items-center bg-black/30"> <!-- Adicionada sobreposição para melhor contraste -->
 
             <img src="./assets/mega-dogao2.jpg" alt="Logo Mega Dogão"
                 class="w-32 h-32 rounded-full shadow-lg hover:scale-110 duration-200">
 
             <h1 class="text-4xl mt-4 mb-2 font-bold text-white">Mega Dogão</h1>
 
-            <span class="text-white font-medium"> Rua Pará, Andrelândia - MG </span>
+            <span class="text-white font-medium">Rua Pará, Andrelândia - MG</span>
 
             <div class="bg-green-600 px-4 py-1 rounded-lg mt-5" id="date-span">
-                <span class="text-white font-medium">Seg á Dom - 18:00 as 22:00</span>
+                <span class="text-white font-medium">Seg á Dom - 18:00 às 01:00</span> <!-- Horário atualizado -->
             </div>
 
         </div>
@@ -69,18 +69,20 @@
                 <img src="./assets/mega-dogao.jpg" alt="Dogão Clássico"
                     class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" loading="lazy">
 
-                <div>
-                    <p class="font-bold">Mega tradicional</p>
-                    <p class="text-sm ">Purê, salsicha, molho, milho, batata palha.</p>
+                <div class="flex flex-col flex-1">
+                    <div>
+                        <p class="font-bold">Mega tradicional</p>
+                        <p class="text-sm ">Purê, salsicha, molho, milho, batata palha.</p>
+                    </div>
 
-                    <div class="flex items-center gap-2 justify-between mt-3">
+                    <div class="flex items-center gap-2 justify-between mt-auto pt-2">
                         <p class="font-bold text-lg">R$ 12.00</p>
-                        <button class="bg-gray-900 px-5 rounded add-to-cart-btn" data-name="Mega tradicional"
+                        <button class="bg-gray-900 px-5 py-2 rounded add-to-cart-btn" data-name="Mega tradicional"
                             data-price="12.00">
                             <i class="fa fa-cart-plus text-lg text-white"></i>
                         </button>
                     </div>
-
+                    
                 </div>
 
             </div>
@@ -91,13 +93,15 @@
                 <img src="./assets/mega-dogao2.jpg" alt="Dogão Turbinado"
                     class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" loading="lazy">
 
-                <div>
-                    <p class="font-bold">Dogão Duplo</p>
-                    <p class="text-sm ">2 salsichas, tudo em dobro!</p>
+                <div class="flex flex-col flex-1">
+                    <div>
+                        <p class="font-bold">Dogão Duplo</p>
+                        <p class="text-sm ">2 salsichas, tudo em dobro!</p>
+                    </div>
 
-                    <div class="flex items-center gap-2 justify-between mt-3">
+                    <div class="flex items-center gap-2 justify-between mt-auto pt-2">
                         <p class="font-bold text-lg">R$ 18.00</p>
-                        <button class="bg-gray-900 px-5 rounded add-to-cart-btn" data-name="Dogão Duplo"
+                        <button class="bg-gray-900 px-5 py-2 rounded add-to-cart-btn" data-name="Dogão Duplo"
                             data-price="18.00">
                             <i class="fa fa-cart-plus text-lg text-white"></i>
                         </button>
@@ -113,13 +117,15 @@
                 <img src="./assets/mega-dogao3.jpg" alt="Dogão da Casa"
                     class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" loading="lazy">
 
-                <div>
-                    <p class="font-bold">Mega Bacon</p>
-                    <p class="text-sm ">Tudo do tradicional + bacon crocante.</p>
+                <div class="flex flex-col flex-1">
+                    <div>
+                        <p class="font-bold">Mega Bacon</p>
+                        <p class="text-sm ">Tudo do tradicional + bacon crocante.</p>
+                    </div>
 
-                    <div class="flex items-center gap-2 justify-between mt-3">
+                    <div class="flex items-center gap-2 justify-between mt-auto pt-2">
                         <p class="font-bold text-lg">R$ 14.00</p>
-                        <button class="bg-gray-900 px-5 rounded add-to-cart-btn" data-name="Mega Bacon"
+                        <button class="bg-gray-900 px-5 py-2 rounded add-to-cart-btn" data-name="Mega Bacon"
                             data-price="14.00">
                             <i class="fa fa-cart-plus text-lg text-white"></i>
                         </button>
@@ -135,13 +141,15 @@
                 <img src="./assets/mega-dogao4.jpg" alt="Dogão Vegetariano"
                     class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" loading="lazy">
 
-                <div>
-                    <p class="font-bold">Dogão Veggie</p>
-                    <p class="text-sm ">Purê, legumes grelhados, milho, batata palha.</p>
+                <div class="flex flex-col flex-1">
+                    <div>
+                        <p class="font-bold">Dogão Veggie</p>
+                        <p class="text-sm ">Purê, legumes grelhados, milho, batata palha.</p>
+                    </div>
 
-                    <div class="flex items-center gap-2 justify-between mt-3">
+                    <div class="flex items-center gap-2 justify-between mt-auto pt-2">
                         <p class="font-bold text-lg">R$ 13.00</p>
-                        <button class="bg-gray-900 px-5 rounded add-to-cart-btn" data-name="Dogão Veggie"
+                        <button class="bg-gray-900 px-5 py-2 rounded add-to-cart-btn" data-name="Dogão Veggie"
                             data-price="13.00">
                             <i class="fa fa-cart-plus text-lg text-white"></i>
                         </button>
@@ -168,12 +176,14 @@
                 <img src="./assets/refri-1.png" alt="Coca lata"
                     class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" loading="lazy">
 
-                <div class="w-full">
-                    <p class="font-bold">Coca lata 350ml</p>
+                <div class="w-full flex flex-col flex-1">
+                    <div>
+                        <p class="font-bold">Coca lata 350ml</p>
+                    </div>
 
-                    <div class="flex items-center gap-2 justify-between mt-3">
+                    <div class="flex items-center gap-2 justify-between mt-auto pt-2">
                         <p class="font-bold text-lg">R$ 6</p>
-                        <button class="bg-gray-900 px-5 rounded add-to-cart-btn" data-name="Coca lata" data-price="6">
+                        <button class="bg-gray-900 px-5 py-2 rounded add-to-cart-btn" data-name="Coca lata" data-price="6">
                             <i class="fa fa-cart-plus text-lg text-white"></i>
                         </button>
                     </div>
@@ -188,12 +198,14 @@
                 <img src="./assets/refri-2.png" alt="Guaraná lata"
                     class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" loading="lazy">
 
-                <div class="w-full">
-                    <p class="font-bold">Guaraná lata 350ml</p>
+                <div class="w-full flex flex-col flex-1">
+                    <div>
+                        <p class="font-bold">Guaraná lata 350ml</p>
+                    </div>
 
-                    <div class="flex items-center gap-2 justify-between mt-3">
+                    <div class="flex items-center gap-2 justify-between mt-auto pt-2">
                         <p class="font-bold text-lg">R$ 6</p>
-                        <button class="bg-gray-900 px-5 rounded add-to-cart-btn" data-name="Guaraná lata"
+                        <button class="bg-gray-900 px-5 py-2 rounded add-to-cart-btn" data-name="Guaraná lata"
                             data-price="6">
                             <i class="fa fa-cart-plus text-lg text-white"></i>
                         </button>
