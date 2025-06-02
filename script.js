@@ -114,7 +114,7 @@ function updatecartModal() {
   cartItemsContainer.innerHTML = "";
   let total = 0;
 
-  cart.forEach(item => {
+  cart.forEach((item) => {
     const cartItemElement = document.createElement("div");
     cartItemElement.classList.add(
       "flex",
@@ -122,7 +122,7 @@ function updatecartModal() {
       "mb-4",
       "items-start", // Alinhamento vertical para melhor visualização com os botões
       "border-b", // Adiciona uma linha separadora sutil
-      "pb-3"      // Espaçamento abaixo da linha
+      "pb-3" // Espaçamento abaixo da linha
     );
 
     cartItemElement.innerHTML = `
@@ -130,17 +130,25 @@ function updatecartModal() {
                 <p class="font-medium">${item.name}</p>
                 <p class="font-medium mt-1">R$ ${item.price.toFixed(2)}</p>
                 <div class="flex items-center gap-3 my-2">
-                    <button class="cart-item-action-btn text-red-500 hover:text-red-700 px-2 py-1 rounded" data-name="${item.name}" data-action="decrease">
+                    <button class="cart-item-action-btn text-red-500 hover:text-red-700 px-2 py-1 rounded" data-name="${
+                      item.name
+                    }" data-action="decrease">
                         <i class="fas fa-minus"></i>
                     </button>
-                    <span class="font-medium w-5 text-center">${item.quantity}</span>
-                    <button class="cart-item-action-btn text-green-500 hover:text-green-700 px-2 py-1 rounded" data-name="${item.name}" data-action="increase">
+                    <span class="font-medium w-5 text-center">${
+                      item.quantity
+                    }</span>
+                    <button class="cart-item-action-btn text-green-500 hover:text-green-700 px-2 py-1 rounded" data-name="${
+                      item.name
+                    }" data-action="increase">
                         <i class="fas fa-plus"></i>
                     </button>
                 </div>
         </div>
         <div>
-            <button class="cart-item-action-btn text-red-500 hover:text-red-700 font-semibold px-2 py-1 rounded" data-name="${item.name}" data-action="remove_all">
+            <button class="cart-item-action-btn text-red-500 hover:text-red-700 font-semibold px-2 py-1 rounded" data-name="${
+              item.name
+            }" data-action="remove_all">
                 <i class="fas fa-trash-alt mr-1"></i>Remover
             </div>
     `;
@@ -176,8 +184,6 @@ cartItemsContainer.addEventListener("click", function (event) {
   }
 });
 
-
-
 function removeItemCart(name) {
   const index = cart.findIndex((item) => item.name === name);
 
@@ -194,7 +200,7 @@ function removeItemCart(name) {
 }
 
 function increaseItemQuantity(name) {
-  const item = cart.find(i => i.name === name);
+  const item = cart.find((i) => i.name === name);
   if (item) {
     item.quantity += 1;
     updatecartModal();
@@ -202,14 +208,12 @@ function increaseItemQuantity(name) {
 }
 
 function removeAllUnitsOfItem(name) {
-  const index = cart.findIndex(item => item.name === name);
+  const index = cart.findIndex((item) => item.name === name);
   if (index !== -1) {
     cart.splice(index, 1); // Remove o item completamente do array
     updatecartModal();
   }
 }
-
-
 
 addressInput.addEventListener("input", function (event) {
   let inputValue = event.target.value;
@@ -240,16 +244,16 @@ checkoutBtn.addEventListener("click", function () {
 
   if (cart.length === 0) {
     Toastify({
-        text: "Seu carrinho está vazio!",
-        duration: 3000,
-        close: true,
-        gravity: "top",
-        position: "right",
-        stopOnFocus: true,
-        style: {
-          background: "#ef4444", // Vermelho
-        },
-      }).showToast();
+      text: "Seu carrinho está vazio!",
+      duration: 3000,
+      close: true,
+      gravity: "top",
+      position: "right",
+      stopOnFocus: true,
+      style: {
+        background: "#ef4444", // Vermelho
+      },
+    }).showToast();
     return;
   }
 
@@ -257,36 +261,46 @@ checkoutBtn.addEventListener("click", function () {
     addressWarn.classList.remove("hidden");
     addressInput.classList.add("border-red-500");
     Toastify({
-        text: "Por favor, informe seu endereço.",
-        duration: 3000,
-        close: true,
-        gravity: "top",
-        position: "right",
-        stopOnFocus: true,
-        style: {
-          background: "#ef4444", // Vermelho
-        },
-      }).showToast();
+      text: "Por favor, informe seu endereço.",
+      duration: 3000,
+      close: true,
+      gravity: "top",
+      position: "right",
+      stopOnFocus: true,
+      style: {
+        background: "#ef4444", // Vermelho
+      },
+    }).showToast();
     return;
   }
 
   // Enviar o pedido para api whatsapp
   const cartItemsText = cart
     .map((item) => {
-      return `\n- ${item.name} (Qtd: ${item.quantity}) - Preço: R$${item.price.toFixed(2)}`;
+      return `\n- ${item.name} (Qtd: ${
+        item.quantity
+      }) - Preço: R$${item.price.toFixed(2)}`;
     })
     .join("");
-  
-  const totalPedido = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+
+  const totalPedido = cart.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0
+  );
   const clientObservations = observationsInput.value;
 
   const message = encodeURIComponent(
-    `Olá, gostaria de fazer o seguinte pedido:\n${cartItemsText}\n\nTotal: R$${totalPedido.toFixed(2)}\n\nEndereço de entrega: ${addressInput.value}${clientObservations ? `\n\nObservações: ${clientObservations}` : ""}`
+    `Olá, gostaria de fazer o seguinte pedido:\n${cartItemsText}\n\nTotal: R$${totalPedido.toFixed(
+      2
+    )}\n\nEndereço de entrega: ${addressInput.value}${
+      clientObservations ? `\n\nObservações: ${clientObservations}` : ""
+    }`
   );
 
   window.open(
     `https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${message}`,
-    "_blank", "noopener noreferrer" // Adicionado rel="noopener noreferrer" por segurança
+    "_blank",
+    "noopener noreferrer" // Adicionado rel="noopener noreferrer" por segurança
   );
 
   cart = [];
@@ -300,10 +314,10 @@ function checkRestaurantOpen() {
   const agora = new Date();
   const horaAtual = agora.getHours();
   // const diaDaSemana = agora.getDay(); // 0 = Domingo, 1 = Segunda, ..., 6 = Sábado
-                                      // Pode ser usado se houver dias específicos de fechamento
+  // Pode ser usado se houver dias específicos de fechamento
 
   // Horário de funcionamento: 18:00 (inclusive) até 01:00 (exclusive) do dia seguinte
-  const horaAbertura = 18;  // 18:00
+  const horaAbertura = 18; // 18:00
   const horaFechamento = 1; // 01:00 da manhã (do dia seguinte)
 
   // Se a hora atual for igual ou maior que a hora de abertura (ex: 18:00, 19:00 ... 23:00)
@@ -329,24 +343,22 @@ function atualizarStatusFuncionamentoHeader() {
     spanTextElement.textContent = `${horarioTextoBase} (Aberto)`;
   } else {
     dateSpanElement.classList.remove("bg-green-600"); // Garante que a cor de aberto seja removida
-    dateSpanElement.classList.add("bg-red-500");    // Adiciona classe para fechado (vermelho)
+    dateSpanElement.classList.add("bg-red-500"); // Adiciona classe para fechado (vermelho)
     spanTextElement.textContent = `${horarioTextoBase} (Fechado)`;
   }
 }
 
-
-
 // Adicionar ano corrente no rodapé
 const currentYearSpan = document.getElementById("current-year");
 if (currentYearSpan) {
-    currentYearSpan.textContent = new Date().getFullYear();
+  currentYearSpan.textContent = new Date().getFullYear();
 }
 
 // Chamar a atualização do status do header quando o DOM estiver carregado
 // e configurar para atualizar periodicamente (opcional)
-document.addEventListener('DOMContentLoaded', function() {
-    atualizarStatusFuncionamentoHeader(); // Chama na carga inicial
+document.addEventListener("DOMContentLoaded", function () {
+  atualizarStatusFuncionamentoHeader(); // Chama na carga inicial
 
-    // Opcional: Atualizar o status periodicamente (ex: a cada minuto)
-    setInterval(atualizarStatusFuncionamentoHeader, 60000); // 60000 ms = 1 minuto
+  // Opcional: Atualizar o status periodicamente (ex: a cada minuto)
+  setInterval(atualizarStatusFuncionamentoHeader, 60000); // 60000 ms = 1 minuto
 });
