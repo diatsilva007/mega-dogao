@@ -35,6 +35,23 @@ document.addEventListener("click", function (event) {
   let parentButton = event.target.closest(".add-to-cart-btn");
 
   if (parentButton) {
+    // Verificar se o restaurante está aberto ANTES de adicionar ao carrinho
+    const isOpen = checkRestaurantOpen();
+    if (!isOpen) {
+      Toastify({
+        text: "Ops, o restaurante está fechado no momento! Não é possível adicionar itens.",
+        duration: 3000,
+        close: true,
+        gravity: "top", // `top` or `bottom`
+        position: "right", // `left`, `center` or `right`
+        stopOnFocus: true, // Impede que o brinde seja descartado ao passar o mouse
+        style: {
+          background: "#ef4444", // Vermelho
+        },
+      }).showToast();
+      return; // Impede a adição ao carrinho
+    }
+
     const name = parentButton.getAttribute("data-name");
     const price = parseFloat(parentButton.getAttribute("data-price"));
     addToCart(name, price);
