@@ -7,14 +7,13 @@ const closeModalBtn = document.getElementById("close-modal-btn");
 const cartCounter = document.getElementById("cart-count");
 const addressInput = document.getElementById("address");
 const addressWarn = document.getElementById("address-warn");
-const observationsInput = document.getElementById("observations"); // Novo campo
+const observationsInput = document.getElementById("observations");
 
-const WHATSAPP_PHONE_NUMBER = "+5535997714779"; // Número de WhatsApp para o pedido
+const WHATSAPP_PHONE_NUMBER = "+5535997714779";
 
 let cart = [];
-let lastFocusedElement; // Para restaurar o foco ao fechar o modal
+let lastFocusedElement;
 
-// Função para fechar o modal do carrinho e restaurar o foco
 function closeCartModal() {
   cartModal.style.display = "none";
   if (lastFocusedElement) {
@@ -22,54 +21,47 @@ function closeCartModal() {
   }
 }
 
-// Abrir o modal do carrinho
 cartBtn.addEventListener("click", function () {
-  lastFocusedElement = document.activeElement; // Salva o elemento que tinha foco
+  lastFocusedElement = document.activeElement;
   updatecartModal();
   cartModal.style.display = "flex";
-  closeModalBtn.focus(); // Move o foco para o botão de fechar dentro do modal
+  if (closeModalBtn) closeModalBtn.focus();
 });
 
-// Fechar o modal quando clicar fora
 cartModal.addEventListener("click", function (event) {
   if (event.target === cartModal) {
     closeCartModal();
   }
 });
 
-// Fechar o modal quando clicar no botão fechar
 closeModalBtn.addEventListener("click", function () {
   closeCartModal();
 });
 
-// Fechar o modal com a tecla Escape
 window.addEventListener("keydown", function (event) {
   if (event.key === "Escape" && cartModal.style.display === "flex") {
     closeCartModal();
   }
 });
 
-// Adicionar item ao carrinho ao clicar no botão
-// Alterado para escutar no documento inteiro para cobrir todos os botões .add-to-cart-btn
 document.addEventListener("click", function (event) {
   let parentButton = event.target.closest(".add-to-cart-btn");
 
   if (parentButton) {
-    // Verificar se o restaurante está aberto ANTES de adicionar ao carrinho
     const isOpen = checkRestaurantOpen();
     if (!isOpen) {
       Toastify({
         text: "Ops, o restaurante está fechado no momento! Não é possível adicionar itens.",
         duration: 3000,
         close: true,
-        gravity: "top", // `top` or `bottom`
-        position: "right", // `left`, `center` or `right`
-        stopOnFocus: true, // Impede que o brinde seja descartado ao passar o mouse
+        gravity: "top",
+        position: "right",
+        stopOnFocus: true,
         style: {
-          background: "#ef4444", // Vermelho
+          background: "#ef4444",
         },
       }).showToast();
-      return; // Impede a adição ao carrinho
+      return;
     }
 
     const name = parentButton.getAttribute("data-name");
@@ -80,24 +72,22 @@ document.addEventListener("click", function (event) {
       text: `"${name}" adicionado ao carrinho!`,
       duration: 2000,
       close: true,
-      gravity: "top", // `top` or `bottom`
-      position: "right", // `left`, `center` or `right`
-      stopOnFocus: true, // Impede que o brinde seja descartado ao passar o mouse
+      gravity: "top",
+      position: "right",
+      stopOnFocus: true,
       style: {
-        background: "linear-gradient(to right, #00b09b, #96c93d)", // Verde
+        background: "linear-gradient(to right, #00b09b, #96c93d)",
       },
     }).showToast();
   }
 });
 
-// Função para adicionar no carrinho
 function addToCart(name, price) {
   const existingItem = cart.find((item) => item.name === name);
 
   if (existingItem) {
-    // Se o item já existe, aumenta a quantidade e atualiza o preço
     existingItem.quantity += 1;
-    existingItem.price = price; // Atualiza o preço para o mais recente
+    existingItem.price = price; // Garante que o preço seja atualizado se houver promoções dinâmicas
   } else {
     cart.push({
       name,
@@ -105,11 +95,9 @@ function addToCart(name, price) {
       quantity: 1,
     });
   }
-
   updatecartModal();
 }
 
-// Atualiza carrinho
 function updatecartModal() {
   cartItemsContainer.innerHTML = "";
   let total = 0;
@@ -120,9 +108,9 @@ function updatecartModal() {
       "flex",
       "justify-between",
       "mb-4",
-      "items-start", // Alinhamento vertical para melhor visualização com os botões
-      "border-b", // Adiciona uma linha separadora sutil
-      "pb-3" // Espaçamento abaixo da linha
+      "items-start", // Alterado para items-start para melhor alinhamento se o nome for longo
+      "border-b",
+      "pb-3"
     );
 
     cartItemElement.innerHTML = `
@@ -132,15 +120,20 @@ function updatecartModal() {
                 <div class="flex items-center gap-3 my-2">
                     <button class="cart-item-action-btn text-red-500 hover:text-red-700 px-2 py-1 rounded" data-name="${
                       item.name
-                    }" data-action="decrease">
+                    }" data-action="decrease" aria-label="Diminuir quantidade de ${
+      item.name
+    }">
                         <i class="fas fa-minus"></i>
                     </button>
-                    <span class="font-medium w-5 text-center">${
+                    <span class="font-medium w-5 text-center" aria-live="polite">${
+                      // aria-live para leitores de tela
                       item.quantity
                     }</span>
                     <button class="cart-item-action-btn text-green-500 hover:text-green-700 px-2 py-1 rounded" data-name="${
                       item.name
-                    }" data-action="increase">
+                    }" data-action="increase" aria-label="Aumentar quantidade de ${
+      item.name
+    }">
                         <i class="fas fa-plus"></i>
                     </button>
                 </div>
@@ -148,13 +141,14 @@ function updatecartModal() {
         <div>
             <button class="cart-item-action-btn text-red-500 hover:text-red-700 font-semibold px-2 py-1 rounded" data-name="${
               item.name
-            }" data-action="remove_all">
+            }" data-action="remove_all" aria-label="Remover ${
+      item.name
+    } do carrinho">
                 <i class="fas fa-trash-alt mr-1"></i>Remover
-            </div>
-    `;
-
+            </button>
+        </div>
+    `; // Adicionado aria-label para botões
     total += item.price * item.quantity;
-
     cartItemsContainer.appendChild(cartItemElement);
   });
 
@@ -163,11 +157,9 @@ function updatecartModal() {
     currency: "BRL",
   });
 
-  cartCounter.textContent = cart.reduce((acc, item) => acc + item.quantity, 0); // Mostra a quantidade total de itens
+  cartCounter.textContent = cart.reduce((acc, item) => acc + item.quantity, 0);
 }
 
-// Função para remover o item do carrinho
-// Modificada para lidar com diferentes ações nos itens do carrinho
 cartItemsContainer.addEventListener("click", function (event) {
   const button = event.target.closest(".cart-item-action-btn");
   if (button) {
@@ -175,7 +167,7 @@ cartItemsContainer.addEventListener("click", function (event) {
     const action = button.getAttribute("data-action");
 
     if (action === "decrease") {
-      removeItemCart(name); // Esta função já decrementa ou remove se qtd=1
+      removeItemCart(name);
     } else if (action === "increase") {
       increaseItemQuantity(name);
     } else if (action === "remove_all") {
@@ -186,10 +178,8 @@ cartItemsContainer.addEventListener("click", function (event) {
 
 function removeItemCart(name) {
   const index = cart.findIndex((item) => item.name === name);
-
   if (index !== -1) {
     const item = cart[index];
-
     if (item.quantity > 1) {
       item.quantity -= 1;
     } else {
@@ -210,21 +200,19 @@ function increaseItemQuantity(name) {
 function removeAllUnitsOfItem(name) {
   const index = cart.findIndex((item) => item.name === name);
   if (index !== -1) {
-    cart.splice(index, 1); // Remove o item completamente do array
+    cart.splice(index, 1);
     updatecartModal();
   }
 }
 
 addressInput.addEventListener("input", function (event) {
   let inputValue = event.target.value;
-
   if (inputValue !== "") {
     addressInput.classList.remove("border-red-500");
     addressWarn.classList.add("hidden");
   }
 });
 
-// Finalizar pedido
 checkoutBtn.addEventListener("click", function () {
   const isOpen = checkRestaurantOpen();
   if (!isOpen) {
@@ -232,11 +220,11 @@ checkoutBtn.addEventListener("click", function () {
       text: "Ops, o restaurante está fechado no momento!",
       duration: 3000,
       close: true,
-      gravity: "top", // `top` or `bottom`
-      position: "right", // `left`, `center` or `right`
-      stopOnFocus: true, // Impede que o brinde seja descartado ao passar o mouse
+      gravity: "top",
+      position: "right",
+      stopOnFocus: true,
       style: {
-        background: "#ef4444", // Vermelho
+        background: "#ef4444",
       },
     }).showToast();
     return;
@@ -251,7 +239,7 @@ checkoutBtn.addEventListener("click", function () {
       position: "right",
       stopOnFocus: true,
       style: {
-        background: "#ef4444", // Vermelho
+        background: "#ef4444",
       },
     }).showToast();
     return;
@@ -260,6 +248,7 @@ checkoutBtn.addEventListener("click", function () {
   if (addressInput.value === "") {
     addressWarn.classList.remove("hidden");
     addressInput.classList.add("border-red-500");
+    addressInput.focus(); // Foca no campo de endereço
     Toastify({
       text: "Por favor, informe seu endereço.",
       duration: 3000,
@@ -268,13 +257,12 @@ checkoutBtn.addEventListener("click", function () {
       position: "right",
       stopOnFocus: true,
       style: {
-        background: "#ef4444", // Vermelho
+        background: "#ef4444",
       },
     }).showToast();
     return;
   }
 
-  // Enviar o pedido para api whatsapp
   const cartItemsText = cart
     .map((item) => {
       return `\n- ${item.name} (Qtd: ${
@@ -300,65 +288,131 @@ checkoutBtn.addEventListener("click", function () {
   window.open(
     `https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${message}`,
     "_blank",
-    "noopener noreferrer" // Adicionado rel="noopener noreferrer" por segurança
+    "noopener noreferrer"
   );
 
   cart = [];
-  addressInput.value = ""; // Limpar o campo de endereço
-  observationsInput.value = ""; // Limpar o campo de observações
+  addressInput.value = "";
+  observationsInput.value = "";
   updatecartModal();
 });
 
-// Função para verificar se o restaurante está aberto (18:00 às 01:00 do dia seguinte)
 function checkRestaurantOpen() {
   const agora = new Date();
   const horaAtual = agora.getHours();
-  // const diaDaSemana = agora.getDay(); // 0 = Domingo, 1 = Segunda, ..., 6 = Sábado
-  // Pode ser usado se houver dias específicos de fechamento
+  // Horário de funcionamento: 18:00 (18) até 01:00 da manhã (1)
+  const horaAbertura = 18;
+  const horaFechamento = 1; // 1 da manhã
 
-  // Horário de funcionamento: 18:00 (inclusive) até 01:00 (exclusive) do dia seguinte
-  const horaAbertura = 18; // 18:00
-  const horaFechamento = 1; // 01:00 da manhã (do dia seguinte)
-
-  // Se a hora atual for igual ou maior que a hora de abertura (ex: 18:00, 19:00 ... 23:00)
-  // OU se a hora atual for menor que a hora de fechamento (ex: 00:00, 00:30 - referente à janela que começou no dia anterior)
+  // Se a hora atual for maior ou igual à hora de abertura (ex: 18, 19, ..., 23)
+  // OU se a hora atual for menor que a hora de fechamento (ex: 00 - meia-noite)
+  // Isso cobre o período que atravessa a meia-noite.
   return horaAtual >= horaAbertura || horaAtual < horaFechamento;
 }
 
-// Função para atualizar o status de funcionamento no header
 function atualizarStatusFuncionamentoHeader() {
   const dateSpanElement = document.getElementById("date-span");
   if (!dateSpanElement) {
-    console.warn("Elemento #date-span não encontrado no header.");
     return;
   }
   const spanTextElement = dateSpanElement.querySelector("span");
-  const isOpen = checkRestaurantOpen();
+  if (!spanTextElement) return;
 
+  const isOpen = checkRestaurantOpen();
   const horarioTextoBase = "Seg á Dom - 18:00 às 01:00";
 
   if (isOpen) {
-    dateSpanElement.classList.remove("bg-red-500"); // Garante que a cor de fechado seja removida
+    dateSpanElement.classList.remove("bg-red-500");
     dateSpanElement.classList.add("bg-green-600");
     spanTextElement.textContent = `${horarioTextoBase} (Aberto)`;
   } else {
-    dateSpanElement.classList.remove("bg-green-600"); // Garante que a cor de aberto seja removida
-    dateSpanElement.classList.add("bg-red-500"); // Adiciona classe para fechado (vermelho)
+    dateSpanElement.classList.remove("bg-green-600");
+    dateSpanElement.classList.add("bg-red-500");
     spanTextElement.textContent = `${horarioTextoBase} (Fechado)`;
   }
 }
 
-// Adicionar ano corrente no rodapé
 const currentYearSpan = document.getElementById("current-year");
 if (currentYearSpan) {
   currentYearSpan.textContent = new Date().getFullYear();
 }
 
-// Chamar a atualização do status do header quando o DOM estiver carregado
-// e configurar para atualizar periodicamente (opcional)
 document.addEventListener("DOMContentLoaded", function () {
-  atualizarStatusFuncionamentoHeader(); // Chama na carga inicial
+  // Adiciona a classe 'loaded' ao body para ativar o efeito de fade-in da página
+  document.body.classList.add("loaded");
 
-  // Opcional: Atualizar o status periodicamente (ex: a cada minuto)
-  setInterval(atualizarStatusFuncionamentoHeader, 60000); // 60000 ms = 1 minuto
+  atualizarStatusFuncionamentoHeader(); // Chama uma vez na carga
+  setInterval(atualizarStatusFuncionamentoHeader, 60000); // Atualiza a cada minuto
+
+  // Lógica para o Botão "Voltar ao Topo"
+  const backToTopButton = document.getElementById("back-to-top-btn");
+  if (backToTopButton) {
+    const scrollThreshold = 300; // Mostrar o botão após rolar 300px
+
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > scrollThreshold) {
+        backToTopButton.classList.remove("opacity-0", "pointer-events-none");
+        backToTopButton.classList.add("opacity-100", "pointer-events-auto");
+      } else {
+        backToTopButton.classList.remove("opacity-100", "pointer-events-auto");
+        backToTopButton.classList.add("opacity-0", "pointer-events-none");
+      }
+    });
+
+    backToTopButton.addEventListener("click", () => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    });
+  }
+
+  // Função genérica para observar elementos e aplicar animação
+  function observeAndAnimateElements(
+    selector,
+    initialClassesToRemove,
+    threshold = 0.1
+  ) {
+    const elements = document.querySelectorAll(selector);
+    if (elements.length > 0) {
+      const observerOptions = {
+        root: null,
+        rootMargin: "0px",
+        threshold: threshold,
+      };
+
+      const observerCallback = (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            initialClassesToRemove.forEach((cls) =>
+              entry.target.classList.remove(cls)
+            );
+            observer.unobserve(entry.target); // Animar apenas uma vez
+          }
+        });
+      };
+
+      const elementObserver = new IntersectionObserver(
+        observerCallback,
+        observerOptions
+      );
+      elements.forEach((element) => {
+        elementObserver.observe(element);
+      });
+    }
+  }
+
+  // Animação de entrada para colunas do rodapé
+  observeAndAnimateElements(
+    ".footer-animate-column",
+    ["opacity-0", "translate-y-5"],
+    0.1
+  );
+
+  // Animação de entrada para elementos de seção variados
+  observeAndAnimateElements(
+    ".animate-section-element",
+    ["opacity-0", "translate-y-3"],
+    0.1
+  );
 });
