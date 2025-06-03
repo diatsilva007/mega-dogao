@@ -23,7 +23,7 @@
     <meta property="og:title" content="Mega Dogão - O melhor cachorro-quente da cidade!">
     <meta property="og:image" content="https://mega-dogao.vercel.app/assets/mega-dogao2.jpg">
     <!-- IMPORTANTE: Substitua SEU_DOMINIO_AQUI pela URL real do seu site após o deploy -->
-     <meta property="og:url" content="https://mega-dogao.vercel.app/">
+    <meta property="og:url" content="https://mega-dogao.vercel.app/">
     <meta property="og:description"
         content="Experimente os cachorros-quentes deliciosos e recheados do Mega Dogão! O verdadeiro sabor carioca.">
     <meta property="og:site_name" content="Mega Dogão">
@@ -299,12 +299,43 @@
 
                 <p class="text-red-500 hidden" id="address-warn">☝️ Digite seu endereço completo</p>
 
-                <div class="mt-4">
-                    <p class="font-semibold">Formas de Pagamento:</p>
-                    <p class="text-sm text-gray-700">Dinheiro, Pix, Cartão de Crédito/Débito (consulte taxas para
-                        entrega).</p>
-                    <!-- Ou use ícones das bandeiras de cartão, Pix, etc. -->
+                <!-- Formas de Pagamento -->
+                <div class="mt-6">
+                    <p class="font-bold">Forma de Pagamento:</p>
+                    <div class="mt-2 space-y-3">
+                        <div>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="payment-method" value="Dinheiro"
+                                    class="form-radio text-red-500 focus:ring-red-400">
+                                <span class="font-medium">Dinheiro</span>
+                            </label>
+                            <input type="text" id="troco-input" placeholder="Precisa de troco para quanto? (Opcional)"
+                                class="w-full border-2 p-1 rounded mt-1 ml-6 text-sm hidden">
+                        </div>
+                        <div>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="payment-method" value="PIX"
+                                    class="form-radio text-red-500 focus:ring-red-400">
+                                <span class="font-medium">PIX</span>
+                            </label>
+                            <div id="pix-info" class="mt-1 ml-6 text-sm hidden">
+                                <p class="text-gray-700">Chave PIX (Telefone): <strong
+                                        id="pix-key-display">+5535997714779</strong></p>
+                                <p class="text-xs text-gray-600">Após finalizar, realize o pagamento e envie o
+                                    comprovante para nosso WhatsApp para agilizar.</p>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="payment-method" value="Cartão na Entrega"
+                                    class="form-radio text-red-500 focus:ring-red-400">
+                                <span class="font-medium">Cartão na Entrega (Crédito/Débito)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <p class="text-red-500 hidden mt-2" id="payment-warn">☝️ Selecione uma forma de pagamento</p>
                 </div>
+                <!-- Fim Formas de Pagamento -->
 
                 <div class="flex items-center justify-between mt-5 w-full">
                     <button id="close-modal-btn">Fechar</button>
@@ -318,7 +349,8 @@
         <!-- Fim Modal cart -->
 
         <!-- Button Cart Footer -->
-        <footer class="w-full bg-red-500 py-3 fixed bottom-0 z-40 flex items-center justify-center px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20">
+        <footer
+            class="w-full bg-red-500 py-3 fixed bottom-0 z-40 flex items-center justify-center px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20">
             <button class="flex items-center gap-2 text-white font-bold whitespace-nowrap" id="cart-btn">
                 (<span id="cart-count">0</span>)
                 Veja meu carrinho
@@ -370,7 +402,8 @@
                             <p class="text-sm mb-2 flex items-center justify-center sm:justify-start">
                                 <i class="fas fa-phone-alt mr-2 text-red-500"></i>
                                 <a href="tel:+5535SEUNUMEROAQUI"
-                                    class="hover:text-red-400 transition-colors duration-300 ease-in-out">(35) SEU-NUMERO-AQUI</a> <!-- ATUALIZE SEU TELEFONE -->
+                                    class="hover:text-red-400 transition-colors duration-300 ease-in-out">(35)
+                                    SEU-NUMERO-AQUI</a> <!-- ATUALIZE SEU TELEFONE -->
                             </p>
                             <p class="font-medium text-gray-200 mt-3 mb-1">Horário de Funcionamento:</p>
                             <p class="text-sm">Segunda a Domingo</p>
@@ -382,7 +415,8 @@
                     <div
                         class="footer-animate-column opacity-0 translate-y-5 transition-all duration-700 ease-out delay-300">
                         <h4 class="font-semibold text-lg text-white mb-4 text-center sm:text-left">Siga-nos</h4>
-                        <div class="flex space-x-6 justify-center sm:justify-start"> <!-- Aumentado space-x para melhor espaçamento -->
+                        <div class="flex space-x-6 justify-center sm:justify-start">
+                            <!-- Aumentado space-x para melhor espaçamento -->
                             <a href="https://instagram.com/SEU_INSTAGRAM" target="_blank" aria-label="Instagram"
                                 class="text-gray-400 hover:text-red-400 transition-transform duration-300 ease-in-out transform hover:scale-110">
                                 <i class="fab fa-instagram fa-2x"></i>
@@ -416,9 +450,7 @@
         <!-- FIM FOOTER PRINCIPAL -->
 
         <!-- Botão Voltar ao Topo -->
-        <button
-            id="back-to-top-btn"
-            class="fixed bottom-16 right-6
+        <button id="back-to-top-btn" class="fixed bottom-16 right-6
                    bg-gradient-to-br from-red-500 to-red-700
                    hover:from-red-600 hover:to-red-800
                    text-white
@@ -429,9 +461,9 @@
                    transform hover:scale-110
                    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400
                    transition-all duration-300 ease-in-out
-                   opacity-0 pointer-events-none z-50"
-            aria-label="Voltar ao topo">
+                   opacity-0 pointer-events-none z-50" aria-label="Voltar ao topo">
             <i class="fas fa-arrow-up text-xl"></i>
         </button>
 </body>
+
 </html>

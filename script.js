@@ -8,6 +8,10 @@ const cartCounter = document.getElementById("cart-count");
 const addressInput = document.getElementById("address");
 const addressWarn = document.getElementById("address-warn");
 const observationsInput = document.getElementById("observations");
+const paymentWarn = document.getElementById("payment-warn");
+const trocoInput = document.getElementById("troco-input");
+const pixInfo = document.getElementById("pix-info");
+const pixKeyDisplay = document.getElementById("pix-key-display");
 
 const WHATSAPP_PHONE_NUMBER = "+5535997714779"; // Atualize com seu número se necessário
 
@@ -19,6 +23,13 @@ function closeCartModal() {
   if (lastFocusedElement) {
     lastFocusedElement.focus();
   }
+  // Resetar campos de pagamento ao fechar
+  trocoInput.classList.add("hidden");
+  pixInfo.classList.add("hidden");
+  document
+    .querySelectorAll('input[name="payment-method"]')
+    .forEach((radio) => (radio.checked = false));
+  paymentWarn.classList.add("hidden"); // Esconde aviso de pagamento ao fechar
 }
 
 cartBtn.addEventListener("click", function () {
@@ -26,6 +37,10 @@ cartBtn.addEventListener("click", function () {
   updatecartModal();
   cartModal.style.display = "flex";
   if (closeModalBtn) closeModalBtn.focus();
+  if (pixKeyDisplay && WHATSAPP_PHONE_NUMBER) {
+    // Garante que o elemento exista
+    pixKeyDisplay.textContent = WHATSAPP_PHONE_NUMBER; // Exibe a chave PIX do .env
+  }
 });
 
 cartModal.addEventListener("click", function (event) {
@@ -213,6 +228,24 @@ addressInput.addEventListener("input", function (event) {
   }
 });
 
+// Lógica para mostrar/esconder campos de pagamento específicos
+document.querySelectorAll('input[name="payment-method"]').forEach((radio) => {
+  radio.addEventListener("change", function () {
+    paymentWarn.classList.add("hidden"); // Esconde aviso ao selecionar
+    if (this.value === "Dinheiro") {
+      trocoInput.classList.remove("hidden");
+      pixInfo.classList.add("hidden");
+      trocoInput.focus();
+    } else if (this.value === "PIX") {
+      pixInfo.classList.remove("hidden");
+      trocoInput.classList.add("hidden");
+    } else {
+      trocoInput.classList.add("hidden");
+      pixInfo.classList.add("hidden");
+    }
+  });
+});
+
 checkoutBtn.addEventListener("click", function () {
   const isOpen = checkRestaurantOpen();
   if (!isOpen) {
@@ -249,6 +282,7 @@ checkoutBtn.addEventListener("click", function () {
     addressWarn.classList.remove("hidden");
     addressInput.classList.add("border-red-500");
     addressInput.focus(); // Foca no campo de endereço
+    paymentWarn.classList.add("hidden"); // Garante que o aviso de pagamento não persista
     Toastify({
       text: "Por favor, informe seu endereço.",
       duration: 3000,
@@ -263,6 +297,27 @@ checkoutBtn.addEventListener("click", function () {
     return;
   }
 
+  // Validar forma de pagamento
+  const selectedPaymentMethod = document.querySelector(
+    'input[name="payment-method"]:checked'
+  );
+  if (!selectedPaymentMethod) {
+    paymentWarn.classList.remove("hidden");
+    Toastify({
+      text: "Por favor, selecione uma forma de pagamento.",
+      duration: 3000,
+      close: true,
+      gravity: "top",
+      position: "right",
+      stopOnFocus: true,
+      style: {
+        background: "#ef4444",
+      },
+    }).showToast();
+    return;
+  }
+  const paymentMethodValue = selectedPaymentMethod.value;
+
   const cartItemsText = cart
     .map((item) => {
       return `\n- ${item.name} (Qtd: ${
@@ -276,13 +331,59 @@ checkoutBtn.addEventListener("click", function () {
     0
   );
   const clientObservations = observationsInput.value;
+  let paymentDetails = `\nForma de Pagamento: ${paymentMethodValue}`; // Inicializa com o método de pagamento
+
+  if (paymentMethodValue === "Dinheiro") {
+    if (trocoInput.value) {
+      // Remove "R$" e substitui vírgula por ponto para conversão
+      const trocoParaValorStr = trocoInput.value
+        .replace(/R\$\s*/, "")
+        .replace(",", ".");
+      const trocoPara = parseFloat(trocoParaValorStr);
+
+      if (isNaN(trocoPara)) {
+        paymentWarn.textContent =
+          "☝️ Valor para troco inválido. Use apenas números.";
+        paymentWarn.classList.remove("hidden");
+        trocoInput.focus();
+        Toastify({
+          text: "Por favor, insira um valor numérico válido para o troco.",
+          duration: 3000,
+          // ... (estilos do Toastify)
+        }).showToast();
+        return;
+      }
+
+      if (trocoPara < totalPedido) {
+        paymentWarn.textContent = `☝️ O valor para troco (R$ ${trocoPara.toFixed(
+          2
+        )}) é menor que o total do pedido (R$ ${totalPedido.toFixed(2)}).`;
+        paymentWarn.classList.remove("hidden");
+        trocoInput.focus();
+        Toastify({
+          text: "O valor do troco deve ser igual ou maior que o total do pedido.",
+          duration: 4000,
+          // ... (estilos do Toastify)
+        }).showToast();
+        return;
+      }
+
+      const trocoCalculado = trocoPara - totalPedido;
+      paymentDetails += ` (Pagar com: R$ ${trocoPara.toFixed(
+        2
+      )} - Troco: R$ ${trocoCalculado.toFixed(2)})`;
+    } else {
+      // Se for dinheiro mas não especificou troco, apenas informa "Dinheiro"
+      // paymentDetails já está como "\nForma de Pagamento: Dinheiro"
+    }
+  }
 
   const message = encodeURIComponent(
     `Olá, gostaria de fazer o seguinte pedido:\n${cartItemsText}\n\nTotal: R$${totalPedido.toFixed(
       2
     )}\n\nEndereço de entrega: ${addressInput.value}${
       clientObservations ? `\n\nObservações: ${clientObservations}` : ""
-    }`
+    }${paymentDetails}`
   );
 
   window.open(
@@ -294,6 +395,13 @@ checkoutBtn.addEventListener("click", function () {
   cart = [];
   addressInput.value = "";
   observationsInput.value = "";
+  trocoInput.value = "";
+  trocoInput.classList.add("hidden");
+  pixInfo.classList.add("hidden");
+  paymentWarn.classList.add("hidden"); // Esconde aviso de pagamento
+  document
+    .querySelectorAll('input[name="payment-method"]')
+    .forEach((radio) => (radio.checked = false));
   updatecartModal();
 });
 
