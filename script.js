@@ -127,6 +127,12 @@ function updatecartModal() {
   cartItemsContainer.innerHTML = "";
   let total = 0;
 
+  if (cart.length === 0) {
+    cartItemsContainer.innerHTML = `
+      <p class="text-center text-gray-600">Seu carrinho está vazio.</p>
+    `;
+  }
+
   cart.forEach((item) => {
     const cartItemElement = document.createElement("div");
     cartItemElement.classList.add(
@@ -477,7 +483,7 @@ function atualizarStatusFuncionamentoHeader() {
     spanTextElement.textContent = `Fechado - ${horarioTextoBase}`;
   }
 }
-
+// Atualiza o ano no rodapé
 const currentYearSpan = document.getElementById("current-year");
 if (currentYearSpan) {
   currentYearSpan.textContent = new Date().getFullYear();
