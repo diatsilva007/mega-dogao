@@ -14,7 +14,11 @@ const trocoInput = document.getElementById("troco-input");
 const pixInfo = document.getElementById("pix-info");
 const pixKeyDisplay = document.getElementById("pix-key-display");
 
-const WHATSAPP_PHONE_NUMBER = "+5535997714779"; // Atualize com seu número se necessário
+// Número de WhatsApp para onde os PEDIDOS serão enviados.
+// Formato internacional: +55 (DDD sem o zero) (Número)
+const WHATSAPP_ORDER_PHONE_NUMBER = "+5535999486054";
+
+const PIX_KEY_VALUE = "(24)993133495"; // Chave PIX para pagamento (formato de exibição)
 
 let cart = [];
 let lastFocusedElement;
@@ -37,10 +41,9 @@ cartBtn.addEventListener("click", function () {
   lastFocusedElement = document.activeElement;
   updatecartModal();
   cartModal.style.display = "flex";
-  if (closeModalBtn) closeModalBtn.focus();
-  if (pixKeyDisplay && WHATSAPP_PHONE_NUMBER) {
-    // Garante que o elemento exista
-    pixKeyDisplay.textContent = WHATSAPP_PHONE_NUMBER; // Exibe a chave PIX do .env
+  if (closeModalBtn) closeModalBtn.focus(); // Foca no botão de fechar para acessibilidade
+  if (pixKeyDisplay) {
+    pixKeyDisplay.textContent = PIX_KEY_VALUE; // Exibe a chave PIX definida
   }
 });
 
@@ -411,7 +414,7 @@ checkoutBtn.addEventListener("click", function () {
 
   setTimeout(() => {
     window.open(
-      `https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${message}`,
+      `https://wa.me/${WHATSAPP_ORDER_PHONE_NUMBER}?text=${message}`,
       "_blank",
       "noopener noreferrer"
     );
