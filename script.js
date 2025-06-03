@@ -76,7 +76,7 @@ document.addEventListener("click", function (event) {
     const isOpen = checkRestaurantOpen();
     if (!isOpen) {
       Toastify({
-        text: "Ops, a lanchonete está fechado no momento! Não é possível adicionar itens.",
+        text: "Ops, a lanchonete está fechada no momento! Não é possível adicionar itens.",
         duration: 3000,
         close: true,
         gravity: "top",
@@ -260,7 +260,7 @@ checkoutBtn.addEventListener("click", function () {
   const isOpen = checkRestaurantOpen();
   if (!isOpen) {
     Toastify({
-      text: "Ops, o restaurante está fechado no momento!",
+      text: "Ops, a lanchonete está fechado no momento!",
       duration: 3000,
       close: true,
       gravity: "top",
