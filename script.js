@@ -9,7 +9,7 @@ const addressInput = document.getElementById("address");
 const addressWarn = document.getElementById("address-warn");
 const observationsInput = document.getElementById("observations");
 
-const WHATSAPP_PHONE_NUMBER = "+5535997714779";
+const WHATSAPP_PHONE_NUMBER = "+5535997714779"; // Atualize com seu número se necessário
 
 let cart = [];
 let lastFocusedElement;
@@ -384,10 +384,16 @@ document.addEventListener("DOMContentLoaded", function () {
       const observerCallback = (entries, observer) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
+            // Elemento entrou na viewport: remover classes para animar
             initialClassesToRemove.forEach((cls) =>
               entry.target.classList.remove(cls)
             );
-            observer.unobserve(entry.target); // Animar apenas uma vez
+            // Não vamos mais fazer unobserve para que a animação possa repetir
+          } else {
+            // Elemento saiu da viewport: adicionar classes de volta para resetar o estado
+            initialClassesToRemove.forEach((cls) =>
+              entry.target.classList.add(cls)
+            );
           }
         });
       };
