@@ -318,7 +318,7 @@
         <!-- Fim Modal cart -->
 
         <!-- Button Cart Footer -->
-        <footer class="w-full bg-red-500 py-3 fixed bottom-0 z-40 flex items-center justify-center">
+        <footer class="w-full bg-red-500 py-3 fixed bottom-0 z-40 flex items-center justify-center px-20">
             <button class="flex items-center gap-2 text-white font-bold" id="cart-btn">
                 (<span id="cart-count">0</span>)
                 Veja meu carrinho
@@ -414,6 +414,24 @@
             </div>
         </footer>
         <!-- FIM FOOTER PRINCIPAL -->
-</body>
 
+        <!-- Botão Voltar ao Topo -->
+        <button
+            id="back-to-top-btn"
+            class="fixed bottom-16 right-6
+                   bg-gradient-to-br from-red-500 to-red-700
+                   hover:from-red-600 hover:to-red-800
+                   text-white
+                   font-semibold
+                   p-3
+                   rounded-full
+                   shadow-xl hover:shadow-2xl
+                   transform hover:scale-110
+                   focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400
+                   transition-all duration-300 ease-in-out
+                   opacity-0 pointer-events-none z-50"
+            aria-label="Voltar ao topo">
+            <i class="fas fa-arrow-up text-xl"></i>
+        </button>
+</body>
 </html>
