@@ -483,16 +483,16 @@ function atualizarStatusFuncionamentoHeader() {
     spanTextElement.textContent = `Fechado - ${horarioTextoBase}`;
   }
 }
-// Atualiza o ano no rodapé
-const currentYearSpan = document.getElementById("current-year");
-if (currentYearSpan) {
-  currentYearSpan.textContent = new Date().getFullYear();
-}
 
 document.addEventListener("DOMContentLoaded", function () {
   // Adiciona a classe 'loaded' ao body para ativar o efeito de fade-in da página
   document.body.classList.add("loaded");
 
+  // Atualiza o ano no rodapé
+  const currentYearSpan = document.getElementById("current-year");
+  if (currentYearSpan) {
+    currentYearSpan.textContent = new Date().getFullYear();
+  }
   atualizarStatusFuncionamentoHeader(); // Chama uma vez na carga
   setInterval(atualizarStatusFuncionamentoHeader, 60000); // Atualiza a cada minuto
 
