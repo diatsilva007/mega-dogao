@@ -449,16 +449,22 @@ function checkRestaurantOpen() {
   const diaDaSemana = agora.getDay(); // 0 (Domingo) a 6 (Sábado)
   const horaAtual = agora.getHours();
 
-  // Novo horário: Todos os dias de 19h (inclusivo) até 23h (exclusivo), exceto Terça-feira.
-  const horaAbertura = 19;
+  let horaAbertura;
   const horaFechamento = 23; // O restaurante fecha às 23:00, então opera até 22:59.
 
   // Verifica se é Terça-feira (diaDaSemana === 2)
   if (diaDaSemana === 2) {
     return false; // Fechado na Terça-feira
   }
+  // Domingo (diaDaSemana === 0)
+  else if (diaDaSemana === 0) {
+    horaAbertura = 20; // Domingo abre às 20h
+  }
+  // Segunda, Quarta, Quinta, Sexta, Sábado
+  else {
+    horaAbertura = 19; // Outros dias abertos (exceto terça) abrem às 19h
+  }
 
-  // Verifica se está dentro do horário de funcionamento nos outros dias
   return horaAtual >= horaAbertura && horaAtual < horaFechamento;
 }
 
@@ -471,16 +477,16 @@ function atualizarStatusFuncionamentoHeader() {
   if (!spanTextElement) return;
 
   const isOpen = checkRestaurantOpen();
-  const horarioTextoBase = "Seg à Dom (Exceto Terça) - 19:00 às 23:00";
+  const horarioTextoFechado = "Seg, Qua-Sáb: 19h-23h | Dom: 20h-23h (Terça Fechado)"; // Atualizado para o novo formato
 
   if (isOpen) {
     dateSpanElement.classList.remove("bg-red-500");
     dateSpanElement.classList.add("bg-green-600");
-    spanTextElement.textContent = `Aberto Agora`; // Simplificado para quando está aberto
+    spanTextElement.textContent = `Aberto Agora`;
   } else {
     dateSpanElement.classList.remove("bg-green-600");
     dateSpanElement.classList.add("bg-red-500");
-    spanTextElement.textContent = `Fechado - ${horarioTextoBase}`;
+    spanTextElement.textContent = `Fechado - ${horarioTextoFechado}`;
   }
 }
 
