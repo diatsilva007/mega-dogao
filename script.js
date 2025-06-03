@@ -26,9 +26,7 @@ function closeCartModal() {
   // Resetar campos de pagamento ao fechar
   trocoInput.classList.add("hidden");
   pixInfo.classList.add("hidden");
-  document
-    .querySelectorAll('input[name="payment-method"]')
-    .forEach((radio) => (radio.checked = false));
+  document.querySelectorAll('input[name="payment-method"]').forEach(radio => radio.checked = false);
   paymentWarn.classList.add("hidden"); // Esconde aviso de pagamento ao fechar
 }
 
@@ -37,8 +35,7 @@ cartBtn.addEventListener("click", function () {
   updatecartModal();
   cartModal.style.display = "flex";
   if (closeModalBtn) closeModalBtn.focus();
-  if (pixKeyDisplay && WHATSAPP_PHONE_NUMBER) {
-    // Garante que o elemento exista
+  if (pixKeyDisplay && WHATSAPP_PHONE_NUMBER) { // Garante que o elemento exista
     pixKeyDisplay.textContent = WHATSAPP_PHONE_NUMBER; // Exibe a chave PIX do .env
   }
 });
@@ -229,21 +226,21 @@ addressInput.addEventListener("input", function (event) {
 });
 
 // Lógica para mostrar/esconder campos de pagamento específicos
-document.querySelectorAll('input[name="payment-method"]').forEach((radio) => {
-  radio.addEventListener("change", function () {
-    paymentWarn.classList.add("hidden"); // Esconde aviso ao selecionar
-    if (this.value === "Dinheiro") {
-      trocoInput.classList.remove("hidden");
-      pixInfo.classList.add("hidden");
-      trocoInput.focus();
-    } else if (this.value === "PIX") {
-      pixInfo.classList.remove("hidden");
-      trocoInput.classList.add("hidden");
-    } else {
-      trocoInput.classList.add("hidden");
-      pixInfo.classList.add("hidden");
-    }
-  });
+document.querySelectorAll('input[name="payment-method"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        paymentWarn.classList.add("hidden"); // Esconde aviso ao selecionar
+        if (this.value === "Dinheiro") {
+            trocoInput.classList.remove("hidden");
+            pixInfo.classList.add("hidden");
+            trocoInput.focus();
+        } else if (this.value === "PIX") {
+            pixInfo.classList.remove("hidden");
+            trocoInput.classList.add("hidden");
+        } else {
+            trocoInput.classList.add("hidden");
+            pixInfo.classList.add("hidden");
+        }
+    });
 });
 
 checkoutBtn.addEventListener("click", function () {
@@ -298,9 +295,7 @@ checkoutBtn.addEventListener("click", function () {
   }
 
   // Validar forma de pagamento
-  const selectedPaymentMethod = document.querySelector(
-    'input[name="payment-method"]:checked'
-  );
+  const selectedPaymentMethod = document.querySelector('input[name="payment-method"]:checked');
   if (!selectedPaymentMethod) {
     paymentWarn.classList.remove("hidden");
     Toastify({
@@ -336,14 +331,11 @@ checkoutBtn.addEventListener("click", function () {
   if (paymentMethodValue === "Dinheiro") {
     if (trocoInput.value) {
       // Remove "R$" e substitui vírgula por ponto para conversão
-      const trocoParaValorStr = trocoInput.value
-        .replace(/R\$\s*/, "")
-        .replace(",", ".");
+      const trocoParaValorStr = trocoInput.value.replace(/R\$\s*/, '').replace(",", ".");
       const trocoPara = parseFloat(trocoParaValorStr);
 
       if (isNaN(trocoPara)) {
-        paymentWarn.textContent =
-          "☝️ Valor para troco inválido. Use apenas números.";
+        paymentWarn.textContent = "☝️ Valor para troco inválido. Use apenas números.";
         paymentWarn.classList.remove("hidden");
         trocoInput.focus();
         Toastify({
@@ -355,9 +347,7 @@ checkoutBtn.addEventListener("click", function () {
       }
 
       if (trocoPara < totalPedido) {
-        paymentWarn.textContent = `☝️ O valor para troco (R$ ${trocoPara.toFixed(
-          2
-        )}) é menor que o total do pedido (R$ ${totalPedido.toFixed(2)}).`;
+        paymentWarn.textContent = `☝️ O valor para troco (R$ ${trocoPara.toFixed(2)}) é menor que o total do pedido (R$ ${totalPedido.toFixed(2)}).`;
         paymentWarn.classList.remove("hidden");
         trocoInput.focus();
         Toastify({
@@ -369,9 +359,7 @@ checkoutBtn.addEventListener("click", function () {
       }
 
       const trocoCalculado = trocoPara - totalPedido;
-      paymentDetails += ` (Pagar com: R$ ${trocoPara.toFixed(
-        2
-      )} - Troco: R$ ${trocoCalculado.toFixed(2)})`;
+      paymentDetails += ` (Pagar com: R$ ${trocoPara.toFixed(2)} - Troco: R$ ${trocoCalculado.toFixed(2)})`;
     } else {
       // Se for dinheiro mas não especificou troco, apenas informa "Dinheiro"
       // paymentDetails já está como "\nForma de Pagamento: Dinheiro"
@@ -386,23 +374,44 @@ checkoutBtn.addEventListener("click", function () {
     }${paymentDetails}`
   );
 
-  window.open(
-    `https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${message}`,
-    "_blank",
-    "noopener noreferrer"
-  );
+  // Mostrar confirmação e desabilitar botão antes de abrir WhatsApp
+  checkoutBtn.disabled = true;
+  checkoutBtn.innerText = "Enviando seu pedido...";
 
-  cart = [];
-  addressInput.value = "";
-  observationsInput.value = "";
-  trocoInput.value = "";
-  trocoInput.classList.add("hidden");
-  pixInfo.classList.add("hidden");
-  paymentWarn.classList.add("hidden"); // Esconde aviso de pagamento
-  document
-    .querySelectorAll('input[name="payment-method"]')
-    .forEach((radio) => (radio.checked = false));
-  updatecartModal();
+  Toastify({
+    text: "Quase lá! Preparando seu pedido para envio via WhatsApp...",
+    duration: 3500, // Duração um pouco maior
+    close: true,
+    gravity: "top",
+    position: "center", // Centralizado para mais destaque
+    stopOnFocus: true,
+    style: {
+      background: "linear-gradient(to right, #00b09b, #96c93d)",
+    },
+  }).showToast();
+
+  setTimeout(() => {
+    window.open(
+      `https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${message}`,
+      "_blank",
+      "noopener noreferrer"
+    );
+
+    // Limpar carrinho e reabilitar botão APÓS o timeout e tentativa de abrir WhatsApp
+    // (ou pode ser feito no evento 'focus' da janela para saber se o usuário voltou)
+    cart = [];
+    addressInput.value = "";
+    observationsInput.value = "";
+    trocoInput.value = "";
+    trocoInput.classList.add("hidden");
+    pixInfo.classList.add("hidden");
+    paymentWarn.classList.add("hidden");
+    document.querySelectorAll('input[name="payment-method"]').forEach(radio => radio.checked = false);
+    updatecartModal();
+
+    checkoutBtn.disabled = false;
+    checkoutBtn.innerText = "Finalizar pedido";
+  }, 2000); // Pequeno delay para o usuário ver a mensagem/botão desabilitado
 });
 
 function checkRestaurantOpen() {
