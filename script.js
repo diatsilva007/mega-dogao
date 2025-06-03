@@ -4,6 +4,7 @@ const cartItemsContainer = document.getElementById("cart-items");
 const cartTotal = document.getElementById("cart-total");
 const checkoutBtn = document.getElementById("checkout-btn");
 const closeModalBtn = document.getElementById("close-modal-btn");
+const closeModalBtnHeader = document.getElementById("close-modal-btn-header"); // Novo botão de fechar
 const cartCounter = document.getElementById("cart-count");
 const addressInput = document.getElementById("address");
 const addressWarn = document.getElementById("address-warn");
@@ -26,7 +27,9 @@ function closeCartModal() {
   // Resetar campos de pagamento ao fechar
   trocoInput.classList.add("hidden");
   pixInfo.classList.add("hidden");
-  document.querySelectorAll('input[name="payment-method"]').forEach(radio => radio.checked = false);
+  document
+    .querySelectorAll('input[name="payment-method"]')
+    .forEach((radio) => (radio.checked = false));
   paymentWarn.classList.add("hidden"); // Esconde aviso de pagamento ao fechar
 }
 
@@ -35,7 +38,8 @@ cartBtn.addEventListener("click", function () {
   updatecartModal();
   cartModal.style.display = "flex";
   if (closeModalBtn) closeModalBtn.focus();
-  if (pixKeyDisplay && WHATSAPP_PHONE_NUMBER) { // Garante que o elemento exista
+  if (pixKeyDisplay && WHATSAPP_PHONE_NUMBER) {
+    // Garante que o elemento exista
     pixKeyDisplay.textContent = WHATSAPP_PHONE_NUMBER; // Exibe a chave PIX do .env
   }
 });
@@ -50,6 +54,12 @@ closeModalBtn.addEventListener("click", function () {
   closeCartModal();
 });
 
+if (closeModalBtnHeader) {
+  closeModalBtnHeader.addEventListener("click", function () {
+    closeCartModal();
+  });
+}
+
 window.addEventListener("keydown", function (event) {
   if (event.key === "Escape" && cartModal.style.display === "flex") {
     closeCartModal();
@@ -63,7 +73,7 @@ document.addEventListener("click", function (event) {
     const isOpen = checkRestaurantOpen();
     if (!isOpen) {
       Toastify({
-        text: "Ops, o restaurante está fechado no momento! Não é possível adicionar itens.",
+        text: "Ops, a lanchonete está fechado no momento! Não é possível adicionar itens.",
         duration: 3000,
         close: true,
         gravity: "top",
@@ -226,21 +236,21 @@ addressInput.addEventListener("input", function (event) {
 });
 
 // Lógica para mostrar/esconder campos de pagamento específicos
-document.querySelectorAll('input[name="payment-method"]').forEach(radio => {
-    radio.addEventListener('change', function() {
-        paymentWarn.classList.add("hidden"); // Esconde aviso ao selecionar
-        if (this.value === "Dinheiro") {
-            trocoInput.classList.remove("hidden");
-            pixInfo.classList.add("hidden");
-            trocoInput.focus();
-        } else if (this.value === "PIX") {
-            pixInfo.classList.remove("hidden");
-            trocoInput.classList.add("hidden");
-        } else {
-            trocoInput.classList.add("hidden");
-            pixInfo.classList.add("hidden");
-        }
-    });
+document.querySelectorAll('input[name="payment-method"]').forEach((radio) => {
+  radio.addEventListener("change", function () {
+    paymentWarn.classList.add("hidden"); // Esconde aviso ao selecionar
+    if (this.value === "Dinheiro") {
+      trocoInput.classList.remove("hidden");
+      pixInfo.classList.add("hidden");
+      trocoInput.focus();
+    } else if (this.value === "PIX") {
+      pixInfo.classList.remove("hidden");
+      trocoInput.classList.add("hidden");
+    } else {
+      trocoInput.classList.add("hidden");
+      pixInfo.classList.add("hidden");
+    }
+  });
 });
 
 checkoutBtn.addEventListener("click", function () {
@@ -295,7 +305,9 @@ checkoutBtn.addEventListener("click", function () {
   }
 
   // Validar forma de pagamento
-  const selectedPaymentMethod = document.querySelector('input[name="payment-method"]:checked');
+  const selectedPaymentMethod = document.querySelector(
+    'input[name="payment-method"]:checked'
+  );
   if (!selectedPaymentMethod) {
     paymentWarn.classList.remove("hidden");
     Toastify({
@@ -331,11 +343,14 @@ checkoutBtn.addEventListener("click", function () {
   if (paymentMethodValue === "Dinheiro") {
     if (trocoInput.value) {
       // Remove "R$" e substitui vírgula por ponto para conversão
-      const trocoParaValorStr = trocoInput.value.replace(/R\$\s*/, '').replace(",", ".");
+      const trocoParaValorStr = trocoInput.value
+        .replace(/R\$\s*/, "")
+        .replace(",", ".");
       const trocoPara = parseFloat(trocoParaValorStr);
 
       if (isNaN(trocoPara)) {
-        paymentWarn.textContent = "☝️ Valor para troco inválido. Use apenas números.";
+        paymentWarn.textContent =
+          "☝️ Valor para troco inválido. Use apenas números.";
         paymentWarn.classList.remove("hidden");
         trocoInput.focus();
         Toastify({
@@ -347,7 +362,9 @@ checkoutBtn.addEventListener("click", function () {
       }
 
       if (trocoPara < totalPedido) {
-        paymentWarn.textContent = `☝️ O valor para troco (R$ ${trocoPara.toFixed(2)}) é menor que o total do pedido (R$ ${totalPedido.toFixed(2)}).`;
+        paymentWarn.textContent = `☝️ O valor para troco (R$ ${trocoPara.toFixed(
+          2
+        )}) é menor que o total do pedido (R$ ${totalPedido.toFixed(2)}).`;
         paymentWarn.classList.remove("hidden");
         trocoInput.focus();
         Toastify({
@@ -359,7 +376,9 @@ checkoutBtn.addEventListener("click", function () {
       }
 
       const trocoCalculado = trocoPara - totalPedido;
-      paymentDetails += ` (Pagar com: R$ ${trocoPara.toFixed(2)} - Troco: R$ ${trocoCalculado.toFixed(2)})`;
+      paymentDetails += ` (Pagar com: R$ ${trocoPara.toFixed(
+        2
+      )} - Troco: R$ ${trocoCalculado.toFixed(2)})`;
     } else {
       // Se for dinheiro mas não especificou troco, apenas informa "Dinheiro"
       // paymentDetails já está como "\nForma de Pagamento: Dinheiro"
@@ -406,7 +425,9 @@ checkoutBtn.addEventListener("click", function () {
     trocoInput.classList.add("hidden");
     pixInfo.classList.add("hidden");
     paymentWarn.classList.add("hidden");
-    document.querySelectorAll('input[name="payment-method"]').forEach(radio => radio.checked = false);
+    document
+      .querySelectorAll('input[name="payment-method"]')
+      .forEach((radio) => (radio.checked = false));
     updatecartModal();
 
     checkoutBtn.disabled = false;
@@ -543,4 +564,52 @@ document.addEventListener("DOMContentLoaded", function () {
     ["opacity-0", "translate-y-3"],
     0.1
   );
+
+  // Funcionalidade para copiar a Chave PIX
+  const copyPixKeyButton = document.getElementById("copy-pix-key-btn");
+  // pixKeyDisplay e pixInfo já são definidos globalmente no seu script.js
+
+  if (copyPixKeyButton && pixKeyDisplay && pixInfo) {
+    copyPixKeyButton.addEventListener("click", () => {
+      // Só tenta copiar se a seção PIX estiver visível
+      if (!pixInfo.classList.contains("hidden")) {
+        const pixKey = pixKeyDisplay.innerText; // Ou .textContent
+        navigator.clipboard
+          .writeText(pixKey)
+          .then(() => {
+            Toastify({
+              text: "Chave PIX copiada!",
+              duration: 3000,
+              close: true,
+              gravity: "top", // `top` or `bottom`
+              position: "right", // `left`, `center` or `right`
+              stopOnFocus: true, // Prevents dismissing of toast on hover
+              style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+              },
+              onClick: function () {}, // Callback after click
+            }).showToast();
+          })
+          .catch((err) => {
+            console.error("Erro ao copiar a chave PIX: ", err);
+            Toastify({
+              text: "Erro ao copiar. Tente manualmente.",
+              duration: 3000,
+              close: true,
+              gravity: "top",
+              position: "right",
+              style: {
+                background: "linear-gradient(to right, #ff5f6d, #ffc371)",
+              },
+            }).showToast();
+          });
+      }
+    });
+  } else {
+    if (!copyPixKeyButton)
+      console.warn("Botão 'copy-pix-key-btn' não encontrado.");
+    if (!pixKeyDisplay)
+      console.warn("Elemento 'pix-key-display' não encontrado.");
+    if (!pixInfo) console.warn("Elemento 'pix-info' não encontrado.");
+  }
 });
