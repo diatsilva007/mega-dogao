@@ -603,25 +603,12 @@ function handleCheckout() {
   setTimeout(() => {
     window.open(whatsappUrl, "_blank", "noopener noreferrer");
 
-    cart = [];
-    customerNameInput.value = "";
-    observationsInput.value = "";
-    addressStreetInput.value = "";
-    addressNumberInput.value = "";
-    addressNeighborhoodInput.value = "";
-    addressComplementInput.value = "";
-    addressReferenceInput.value = "";
-    clearAddressWarnings();
-    trocoInput.value = "";
-    trocoInput.classList.add("hidden");
-    pixInfo.classList.add("hidden");
-    paymentWarn.classList.add("hidden");
-    document
-      .querySelectorAll('input[name="payment-method"]')
-      .forEach((radio) => { radio.checked = false; });
-    updatecartModal();
-
+    // Mostra a mensagem de confirmação do pedido dentro do modal
+    // e atualiza o botão de checkout para "Fazer Novo Pedido".
     showOrderConfirmation(orderId, customerName);
+    // Fecha o modal do carrinho. A função closeCartModal() chamará resetAndStartNewOrder()
+    // (pois a mensagem de confirmação estará visível), resetando o modal.
+    closeCartModal();
   }, 2000); // Pequeno delay para o usuário ver a mensagem/botão desabilitado
 }
 
