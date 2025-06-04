@@ -6,17 +6,31 @@ const checkoutBtn = document.getElementById("checkout-btn");
 const closeModalBtn = document.getElementById("close-modal-btn");
 const closeModalBtnHeader = document.getElementById("close-modal-btn-header"); // Novo botão de fechar
 const cartCounter = document.getElementById("cart-count");
-const addressInput = document.getElementById("address");
-const addressWarn = document.getElementById("address-warn");
+
+const addressStreetInput = document.getElementById("address-street");
+const addressNumberInput = document.getElementById("address-number");
+const addressNeighborhoodInput = document.getElementById("address-neighborhood");
+const addressComplementInput = document.getElementById("address-complement");
+const addressReferenceInput = document.getElementById("address-reference");
+const addressStreetWarn = document.getElementById("address-street-warn");
+const addressNumberWarn = document.getElementById("address-number-warn");
+const addressNeighborhoodWarn = document.getElementById("address-neighborhood-warn");
+
+const customerNameInput = document.getElementById("customer-name");
+const customerNameWarn = document.getElementById("customer-name-warn");
 const observationsInput = document.getElementById("observations");
 const paymentWarn = document.getElementById("payment-warn");
 const trocoInput = document.getElementById("troco-input");
 const pixInfo = document.getElementById("pix-info");
 const pixKeyDisplay = document.getElementById("pix-key-display");
 
+const orderFormContent = document.getElementById("order-form-content");
+const orderConfirmationMessageDiv = document.getElementById("order-confirmation-message");
+const orderIdDisplayModal = document.getElementById("order-id-display-modal");
+const orderCustomerNameDisplay = document.getElementById("order-customer-name-display");
 // Número de WhatsApp para onde os PEDIDOS serão enviados.
 // Formato internacional: +55 (DDD sem o zero) (Número)
-const WHATSAPP_ORDER_PHONE_NUMBER = "+5535999486054";
+const WHATSAPP_ORDER_PHONE_NUMBER = "+5535997714779";  // Número de WhatsApp do Mega Dogão 35999486054
 
 const PIX_KEY_VALUE = "(24)993133495"; // Chave PIX para pagamento (formato de exibição)
 
@@ -28,12 +42,27 @@ function closeCartModal() {
   if (lastFocusedElement) {
     lastFocusedElement.focus();
   }
-  // Resetar campos de pagamento ao fechar
+  // Resetar campos e visualização do modal
+  if (!orderConfirmationMessageDiv.classList.contains('hidden')) {
+    resetAndStartNewOrder(); // Garante que o modal volte ao estado de formulário
+  }
+
+  customerNameInput.value = "";
+  customerNameWarn.classList.add("hidden");
+  customerNameInput.classList.remove("border-red-500");
+
+  addressStreetInput.value = "";
+  addressNumberInput.value = "";
+  addressNeighborhoodInput.value = "";
+  addressComplementInput.value = "";
+  addressReferenceInput.value = "";
+  [addressStreetWarn, addressNumberWarn, addressNeighborhoodWarn].forEach(warn => warn.classList.add("hidden"));
+  [addressStreetInput, addressNumberInput, addressNeighborhoodInput].forEach(input => input.classList.remove("border-red-500"));
   trocoInput.classList.add("hidden");
   pixInfo.classList.add("hidden");
   document
     .querySelectorAll('input[name="payment-method"]')
-    .forEach((radio) => (radio.checked = false));
+    .forEach((radio) => { radio.checked = false; });
   paymentWarn.classList.add("hidden"); // Esconde aviso de pagamento ao fechar
 }
 
@@ -236,17 +265,53 @@ function removeAllUnitsOfItem(name) {
   }
 }
 
-addressInput.addEventListener("input", function (event) {
+function createAddressInputListener(inputElement, warnElement) {
+  inputElement.addEventListener("input", function (event) {
+    let inputValue = event.target.value.trim();
+    if (inputValue !== "") {
+      inputElement.classList.remove("border-red-500");
+      warnElement.classList.add("hidden");
+    }
+  });
+}
+
+createAddressInputListener(addressStreetInput, addressStreetWarn);
+createAddressInputListener(addressNumberInput, addressNumberWarn);
+createAddressInputListener(addressNeighborhoodInput, addressNeighborhoodWarn);
+
+// addressInput.addEventListener("input", function (event) {
+//   let inputValue = event.target.value;
+//   if (inputValue !== "") {
+//     addressInput.classList.remove("border-red-500");
+//     addressWarn.classList.add("hidden");
+//   }
+// });
+
+function clearAddressWarnings() {
+    addressStreetWarn.classList.add("hidden");
+    addressStreetInput.classList.remove("border-red-500");
+    addressNumberWarn.classList.add("hidden");
+    addressNumberInput.classList.remove("border-red-500");
+    addressNeighborhoodWarn.classList.add("hidden");
+    addressNeighborhoodInput.classList.remove("border-red-500");
+}
+
+
+customerNameInput.addEventListener("input", function (event) {
   let inputValue = event.target.value;
-  if (inputValue !== "") {
-    addressInput.classList.remove("border-red-500");
-    addressWarn.classList.add("hidden");
+  if (inputValue.trim() !== "") {
+    customerNameInput.classList.remove("border-red-500");
+    customerNameWarn.classList.add("hidden");
   }
 });
 
 // Lógica para mostrar/esconder campos de pagamento específicos
 document.querySelectorAll('input[name="payment-method"]').forEach((radio) => {
   radio.addEventListener("change", function () {
+    // Garante que o aviso de nome e endereço não persistam se já preenchidos
+    if (customerNameInput.value.trim() !== "") customerNameWarn.classList.add("hidden");    
+
+
     paymentWarn.classList.add("hidden"); // Esconde aviso ao selecionar
     if (this.value === "Dinheiro") {
       trocoInput.classList.remove("hidden");
@@ -262,7 +327,55 @@ document.querySelectorAll('input[name="payment-method"]').forEach((radio) => {
   });
 });
 
-checkoutBtn.addEventListener("click", function () {
+function generateOrderId() {
+  const timestamp = Date.now();
+  const randomNumber = Math.floor(Math.random() * 1000);
+  return `MD-${timestamp}-${randomNumber}`; // MD para Mega Dogão
+}
+
+function showOrderConfirmation(orderId, customerName) {
+    orderFormContent.classList.add('hidden');
+
+    orderIdDisplayModal.textContent = orderId;
+    orderCustomerNameDisplay.textContent = customerName;
+    orderConfirmationMessageDiv.classList.remove('hidden');
+
+    checkoutBtn.innerHTML = '<i class="fas fa-plus-circle mr-2"></i>Fazer Novo Pedido';
+    checkoutBtn.removeEventListener('click', handleCheckout);
+    checkoutBtn.addEventListener('click', resetAndStartNewOrder);
+    checkoutBtn.disabled = false;
+}
+
+function resetAndStartNewOrder() {
+    orderConfirmationMessageDiv.classList.add('hidden');
+    orderFormContent.classList.remove('hidden');
+
+    cart = [];
+    customerNameInput.value = "";
+    customerNameWarn.classList.add("hidden");
+    customerNameInput.classList.remove("border-red-500");
+
+    addressStreetInput.value = "";
+    addressNumberInput.value = "";
+    addressNeighborhoodInput.value = "";
+    addressComplementInput.value = "";
+    addressReferenceInput.value = "";
+    clearAddressWarnings();
+
+    observationsInput.value = "";
+
+    trocoInput.value = "";
+    trocoInput.classList.add("hidden");
+    pixInfo.classList.add("hidden");
+    paymentWarn.classList.add("hidden");
+    document.querySelectorAll('input[name="payment-method"]').forEach((radio) => { radio.checked = false; });
+    updatecartModal();
+
+    checkoutBtn.innerHTML = '<i class="fas fa-share-square mr-2"></i>Finalizar pedido';
+    checkoutBtn.removeEventListener('click', resetAndStartNewOrder);
+    checkoutBtn.addEventListener('click', handleCheckout);
+}
+function handleCheckout() {
   const isOpen = checkRestaurantOpen();
   if (!isOpen) {
     Toastify({
@@ -294,13 +407,15 @@ checkoutBtn.addEventListener("click", function () {
     return;
   }
 
-  if (addressInput.value === "") {
-    addressWarn.classList.remove("hidden");
-    addressInput.classList.add("border-red-500");
-    addressInput.focus(); // Foca no campo de endereço
+  const customerName = customerNameInput.value.trim();
+  if (customerName === "") {
+    customerNameWarn.classList.remove("hidden");
+    customerNameInput.classList.add("border-red-500");
+    customerNameInput.focus();
+    clearAddressWarnings(); // Garante que os avisos de endereço não persistam
     paymentWarn.classList.add("hidden"); // Garante que o aviso de pagamento não persista
     Toastify({
-      text: "Por favor, informe seu endereço.",
+      text: "Por favor, informe seu nome.",
       duration: 3000,
       close: true,
       gravity: "top",
@@ -312,6 +427,65 @@ checkoutBtn.addEventListener("click", function () {
     }).showToast();
     return;
   }
+
+  // Validação dos campos de endereço
+  const street = addressStreetInput.value.trim();
+  const number = addressNumberInput.value.trim();
+  const neighborhood = addressNeighborhoodInput.value.trim();
+
+  let firstInvalidAddressField = null;
+
+  if (street === "") {
+    addressStreetWarn.classList.remove("hidden");
+    addressStreetInput.classList.add("border-red-500");
+    if (!firstInvalidAddressField) firstInvalidAddressField = addressStreetInput;
+  }
+  if (number === "") {
+    addressNumberWarn.classList.remove("hidden");
+    addressNumberInput.classList.add("border-red-500");
+    if (!firstInvalidAddressField) firstInvalidAddressField = addressNumberInput;
+  }
+  if (neighborhood === "") {
+    addressNeighborhoodWarn.classList.remove("hidden");
+    addressNeighborhoodInput.classList.add("border-red-500");
+    if (!firstInvalidAddressField) firstInvalidAddressField = addressNeighborhoodInput;
+  }
+
+  if (firstInvalidAddressField) {
+    firstInvalidAddressField.focus();
+    paymentWarn.classList.add("hidden"); // Garante que o aviso de pagamento não persista
+    Toastify({
+      text: "Por favor, preencha todos os campos obrigatórios do endereço.",
+      duration: 3000,
+      close: true,
+      gravity: "top",
+      position: "right",
+      stopOnFocus: true,
+      style: {
+        background: "#ef4444", // Vermelho para erro
+      },
+    }).showToast();
+    return;
+  }
+
+  // if (addressInput.value === "") {
+  //   addressWarn.classList.remove("hidden");
+  //   addressInput.classList.add("border-red-500");
+  //   addressInput.focus(); // Foca no campo de endereço
+  //   paymentWarn.classList.add("hidden"); // Garante que o aviso de pagamento não persista
+  //   Toastify({
+  //     text: "Por favor, informe seu endereço.",
+  //     duration: 3000,
+  //     close: true,
+  //     gravity: "top",
+  //     position: "right",
+  //     stopOnFocus: true,
+  //     style: {
+  //       background: "#ef4444",
+  //     },
+  //   }).showToast();
+  //   return;
+  // }
 
   // Validar forma de pagamento
   const selectedPaymentMethod = document.querySelector(
@@ -333,6 +507,8 @@ checkoutBtn.addEventListener("click", function () {
     return;
   }
   const paymentMethodValue = selectedPaymentMethod.value;
+
+  const orderId = generateOrderId(); // Gera o ID do pedido
 
   const cartItemsText = cart
     .map((item) => {
@@ -394,17 +570,23 @@ checkoutBtn.addEventListener("click", function () {
     }
   }
 
-  const message = encodeURIComponent(
-    `Olá, gostaria de fazer o seguinte pedido:\n${cartItemsText}\n\nTotal: R$${totalPedido.toFixed(
-      2
-    )}\n\nEndereço de entrega: ${addressInput.value}${
-      clientObservations ? `\n\nObservações: ${clientObservations}` : ""
-    }${paymentDetails}`
-  );
+  // Montar a string de endereço completa
+  let fullAddress = `Rua/Av: ${street}, Nº: ${number}, Bairro: ${neighborhood}`;
+  const complement = addressComplementInput.value.trim();
+  const reference = addressReferenceInput.value.trim();
+  if (complement) {
+    fullAddress += `, Complemento: ${complement}`;
+  }
+  if (reference) {
+    fullAddress += ` (Ref: ${reference})`;
+  }
 
-  // Mostrar confirmação e desabilitar botão antes de abrir WhatsApp
+  const message = encodeURIComponent(`*Novo Pedido: ${orderId}*\n\nOlá, meu nome é *${customerName}* e gostaria de fazer o seguinte pedido:\n${cartItemsText}\n\nTotal: R$${totalPedido.toFixed(2)}\n\nEndereço de entrega: ${fullAddress}${clientObservations ? `\n\nObservações: ${clientObservations}` : ""}${paymentDetails}`);
+  const whatsappUrl = `https://wa.me/${WHATSAPP_ORDER_PHONE_NUMBER}?text=${message}`;
+
   checkoutBtn.disabled = true;
-  checkoutBtn.innerText = "Enviando seu pedido...";
+  checkoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Enviando seu pedido...';
+
 
   Toastify({
     text: "Quase lá! Preparando seu pedido para envio via WhatsApp...",
@@ -419,30 +601,29 @@ checkoutBtn.addEventListener("click", function () {
   }).showToast();
 
   setTimeout(() => {
-    window.open(
-      `https://wa.me/${WHATSAPP_ORDER_PHONE_NUMBER}?text=${message}`,
-      "_blank",
-      "noopener noreferrer"
-    );
+    window.open(whatsappUrl, "_blank", "noopener noreferrer");
 
-    // Limpar carrinho e reabilitar botão APÓS o timeout e tentativa de abrir WhatsApp
-    // (ou pode ser feito no evento 'focus' da janela para saber se o usuário voltou)
     cart = [];
-    addressInput.value = "";
+    customerNameInput.value = "";
     observationsInput.value = "";
+    addressStreetInput.value = "";
+    addressNumberInput.value = "";
+    addressNeighborhoodInput.value = "";
+    addressComplementInput.value = "";
+    addressReferenceInput.value = "";
+    clearAddressWarnings();
     trocoInput.value = "";
     trocoInput.classList.add("hidden");
     pixInfo.classList.add("hidden");
     paymentWarn.classList.add("hidden");
     document
       .querySelectorAll('input[name="payment-method"]')
-      .forEach((radio) => (radio.checked = false));
+      .forEach((radio) => { radio.checked = false; });
     updatecartModal();
 
-    checkoutBtn.disabled = false;
-    checkoutBtn.innerText = "Finalizar pedido";
+    showOrderConfirmation(orderId, customerName);
   }, 2000); // Pequeno delay para o usuário ver a mensagem/botão desabilitado
-});
+}
 
 function checkRestaurantOpen() {
   const agora = new Date();
@@ -478,20 +659,42 @@ function atualizarStatusFuncionamentoHeader() {
 
   const isOpen = checkRestaurantOpen();
   const horarioTextoFechado = "Seg, Qua-Sáb: 19h-23h | Dom: 20h-23h (Terça Fechado)"; // Atualizado para o novo formato
+  const addToCartButtons = document.querySelectorAll(".add-to-cart-btn");
 
   if (isOpen) {
     dateSpanElement.classList.remove("bg-red-500");
     dateSpanElement.classList.add("bg-green-600");
     spanTextElement.textContent = `Aberto Agora`;
+
+    addToCartButtons.forEach(button => {
+      button.disabled = false;
+      button.classList.remove("bg-gray-400", "cursor-not-allowed", "opacity-70");
+      button.classList.add("bg-gray-900"); // Restaura a cor original do botão ativo
+      // Garante que o ícone também não fique com estilo de desabilitado, se houver
+      const icon = button.querySelector("i");
+      if (icon) icon.classList.remove("text-gray-300");
+    });
   } else {
     dateSpanElement.classList.remove("bg-green-600");
     dateSpanElement.classList.add("bg-red-500");
     spanTextElement.textContent = `Fechado - ${horarioTextoFechado}`;
+
+    addToCartButtons.forEach(button => {
+      button.disabled = true;
+      button.classList.remove("bg-gray-900");
+      button.classList.add("bg-gray-400", "cursor-not-allowed", "opacity-70"); // Estilo para desabilitado
+      // Pode ser útil estilizar o ícone também para indicar desativação
+      const icon = button.querySelector("i");
+      if (icon) icon.classList.add("text-gray-300");
+    });
   }
 }
 
 document.addEventListener("DOMContentLoaded", function () {
   // Adiciona a classe 'loaded' ao body para ativar o efeito de fade-in da página
+  checkoutBtn.addEventListener("click", handleCheckout); // Configura o listener inicial
+  checkoutBtn.innerHTML = '<i class="fas fa-share-square mr-2"></i>Finalizar pedido'; // Estado inicial do botão
+
   document.body.classList.add("loaded");
 
   // Atualiza o ano no rodapé
