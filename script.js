@@ -9,12 +9,16 @@ const cartCounter = document.getElementById("cart-count");
 
 const addressStreetInput = document.getElementById("address-street");
 const addressNumberInput = document.getElementById("address-number");
-const addressNeighborhoodInput = document.getElementById("address-neighborhood");
+const addressNeighborhoodInput = document.getElementById(
+  "address-neighborhood"
+);
 const addressComplementInput = document.getElementById("address-complement");
 const addressReferenceInput = document.getElementById("address-reference");
 const addressStreetWarn = document.getElementById("address-street-warn");
 const addressNumberWarn = document.getElementById("address-number-warn");
-const addressNeighborhoodWarn = document.getElementById("address-neighborhood-warn");
+const addressNeighborhoodWarn = document.getElementById(
+  "address-neighborhood-warn"
+);
 
 const customerNameInput = document.getElementById("customer-name");
 const customerNameWarn = document.getElementById("customer-name-warn");
@@ -25,12 +29,16 @@ const pixInfo = document.getElementById("pix-info");
 const pixKeyDisplay = document.getElementById("pix-key-display");
 
 const orderFormContent = document.getElementById("order-form-content");
-const orderConfirmationMessageDiv = document.getElementById("order-confirmation-message");
+const orderConfirmationMessageDiv = document.getElementById(
+  "order-confirmation-message"
+);
 const orderIdDisplayModal = document.getElementById("order-id-display-modal");
-const orderCustomerNameDisplay = document.getElementById("order-customer-name-display");
+const orderCustomerNameDisplay = document.getElementById(
+  "order-customer-name-display"
+);
 // Número de WhatsApp para onde os PEDIDOS serão enviados.
 // Formato internacional: +55 (DDD sem o zero) (Número)
-const WHATSAPP_ORDER_PHONE_NUMBER = "+5535997714779";  // Número de WhatsApp do Mega Dogão 35999486054
+const WHATSAPP_ORDER_PHONE_NUMBER = "5535999486054"; // Número de WhatsApp do Mega Dogão (sem o +)
 
 const PIX_KEY_VALUE = "(24)993133495"; // Chave PIX para pagamento (formato de exibição)
 
@@ -42,11 +50,8 @@ function closeCartModal() {
   if (lastFocusedElement) {
     lastFocusedElement.focus();
   }
-  // Resetar campos e visualização do modal
-  if (!orderConfirmationMessageDiv.classList.contains('hidden')) {
-    resetAndStartNewOrder(); // Garante que o modal volte ao estado de formulário
-  }
-
+  // Limpa os campos do formulário quando o modal é fechado manualmente
+  // antes de um pedido ser finalizado.
   customerNameInput.value = "";
   customerNameWarn.classList.add("hidden");
   customerNameInput.classList.remove("border-red-500");
@@ -56,13 +61,17 @@ function closeCartModal() {
   addressNeighborhoodInput.value = "";
   addressComplementInput.value = "";
   addressReferenceInput.value = "";
-  [addressStreetWarn, addressNumberWarn, addressNeighborhoodWarn].forEach(warn => warn.classList.add("hidden"));
-  [addressStreetInput, addressNumberInput, addressNeighborhoodInput].forEach(input => input.classList.remove("border-red-500"));
+  [addressStreetWarn, addressNumberWarn, addressNeighborhoodWarn].forEach(
+    (warn) => warn.classList.add("hidden")
+  );
+  [addressStreetInput, addressNumberInput, addressNeighborhoodInput].forEach(
+    (input) => input.classList.remove("border-red-500")
+  );
   trocoInput.classList.add("hidden");
   pixInfo.classList.add("hidden");
-  document
-    .querySelectorAll('input[name="payment-method"]')
-    .forEach((radio) => { radio.checked = false; });
+  document.querySelectorAll('input[name="payment-method"]').forEach((radio) => {
+    radio.checked = false;
+  });
   paymentWarn.classList.add("hidden"); // Esconde aviso de pagamento ao fechar
 }
 
@@ -279,23 +288,14 @@ createAddressInputListener(addressStreetInput, addressStreetWarn);
 createAddressInputListener(addressNumberInput, addressNumberWarn);
 createAddressInputListener(addressNeighborhoodInput, addressNeighborhoodWarn);
 
-// addressInput.addEventListener("input", function (event) {
-//   let inputValue = event.target.value;
-//   if (inputValue !== "") {
-//     addressInput.classList.remove("border-red-500");
-//     addressWarn.classList.add("hidden");
-//   }
-// });
-
 function clearAddressWarnings() {
-    addressStreetWarn.classList.add("hidden");
-    addressStreetInput.classList.remove("border-red-500");
-    addressNumberWarn.classList.add("hidden");
-    addressNumberInput.classList.remove("border-red-500");
-    addressNeighborhoodWarn.classList.add("hidden");
-    addressNeighborhoodInput.classList.remove("border-red-500");
+  addressStreetWarn.classList.add("hidden");
+  addressStreetInput.classList.remove("border-red-500");
+  addressNumberWarn.classList.add("hidden");
+  addressNumberInput.classList.remove("border-red-500");
+  addressNeighborhoodWarn.classList.add("hidden");
+  addressNeighborhoodInput.classList.remove("border-red-500");
 }
-
 
 customerNameInput.addEventListener("input", function (event) {
   let inputValue = event.target.value;
@@ -309,8 +309,8 @@ customerNameInput.addEventListener("input", function (event) {
 document.querySelectorAll('input[name="payment-method"]').forEach((radio) => {
   radio.addEventListener("change", function () {
     // Garante que o aviso de nome e endereço não persistam se já preenchidos
-    if (customerNameInput.value.trim() !== "") customerNameWarn.classList.add("hidden");    
-
+    if (customerNameInput.value.trim() !== "")
+      customerNameWarn.classList.add("hidden");
 
     paymentWarn.classList.add("hidden"); // Esconde aviso ao selecionar
     if (this.value === "Dinheiro") {
@@ -333,47 +333,65 @@ function generateOrderId() {
   return `MD-${timestamp}-${randomNumber}`; // MD para Mega Dogão
 }
 
+// Antes (aproximadamente linha 346):
+// function showOrderConfirmation(orderId, customerName) {
+//   orderFormContent.classList.add("hidden");
+//
+//   orderIdDisplayModal.textContent = orderId;
+//   orderCustomerNameDisplay.textContent = customerName;
+//   orderConfirmationMessageDiv.classList.remove("hidden");
+//
+//   checkoutBtn.innerHTML =
+//     '<i class="fas fa-plus-circle mr-2"></i>Fazer Novo Pedido';
+//   checkoutBtn.removeEventListener("click", handleCheckout);
+//   checkoutBtn.addEventListener("click", resetAndStartNewOrder);
+//   checkoutBtn.disabled = false;
+// }
+
+// Depois (substitua ou comente o código acima por isto):
 function showOrderConfirmation(orderId, customerName) {
-    orderFormContent.classList.add('hidden');
-
-    orderIdDisplayModal.textContent = orderId;
-    orderCustomerNameDisplay.textContent = customerName;
-    orderConfirmationMessageDiv.classList.remove('hidden');
-
-    checkoutBtn.innerHTML = '<i class="fas fa-plus-circle mr-2"></i>Fazer Novo Pedido';
-    checkoutBtn.removeEventListener('click', handleCheckout);
-    checkoutBtn.addEventListener('click', resetAndStartNewOrder);
-    checkoutBtn.disabled = false;
+  // Esta função não será mais utilizada no fluxo principal de checkout
+  // para simplificar e evitar conflitos. A confirmação de que o pedido
+  // foi encaminhado será feita via Toastify, e o modal será resetado
+  // diretamente pela função resetAndStartNewOrder.
 }
 
 function resetAndStartNewOrder() {
-    orderConfirmationMessageDiv.classList.add('hidden');
-    orderFormContent.classList.remove('hidden');
+  if (orderConfirmationMessageDiv) {
+    orderConfirmationMessageDiv.classList.add("hidden");
+  }
+  if (orderFormContent) {
+    orderFormContent.classList.remove("hidden");
+  }
 
-    cart = [];
-    customerNameInput.value = "";
-    customerNameWarn.classList.add("hidden");
-    customerNameInput.classList.remove("border-red-500");
+  cart = [];
+  customerNameInput.value = "";
+  customerNameWarn.classList.add("hidden");
+  customerNameInput.classList.remove("border-red-500");
 
-    addressStreetInput.value = "";
-    addressNumberInput.value = "";
-    addressNeighborhoodInput.value = "";
-    addressComplementInput.value = "";
-    addressReferenceInput.value = "";
-    clearAddressWarnings();
+  addressStreetInput.value = "";
+  addressNumberInput.value = "";
+  addressNeighborhoodInput.value = "";
+  addressComplementInput.value = "";
+  addressReferenceInput.value = "";
+  clearAddressWarnings();
 
-    observationsInput.value = "";
+  observationsInput.value = "";
 
-    trocoInput.value = "";
-    trocoInput.classList.add("hidden");
-    pixInfo.classList.add("hidden");
-    paymentWarn.classList.add("hidden");
-    document.querySelectorAll('input[name="payment-method"]').forEach((radio) => { radio.checked = false; });
-    updatecartModal();
+  trocoInput.value = "";
+  trocoInput.classList.add("hidden");
+  pixInfo.classList.add("hidden");
+  paymentWarn.classList.add("hidden");
+  document.querySelectorAll('input[name="payment-method"]').forEach((radio) => {
+    radio.checked = false;
+  });
+  updatecartModal();
 
-    checkoutBtn.innerHTML = '<i class="fas fa-share-square mr-2"></i>Finalizar pedido';
-    checkoutBtn.removeEventListener('click', resetAndStartNewOrder);
-    checkoutBtn.addEventListener('click', handleCheckout);
+  checkoutBtn.innerHTML =
+    '<i class="fas fa-share-square mr-2"></i>Finalizar pedido';
+  checkoutBtn.removeEventListener("click", resetAndStartNewOrder);
+  checkoutBtn.addEventListener("click", handleCheckout);
+  checkoutBtn.disabled = false; // Adiciona esta linha para reabilitar o botão
 }
 function handleCheckout() {
   const isOpen = checkRestaurantOpen();
@@ -438,17 +456,20 @@ function handleCheckout() {
   if (street === "") {
     addressStreetWarn.classList.remove("hidden");
     addressStreetInput.classList.add("border-red-500");
-    if (!firstInvalidAddressField) firstInvalidAddressField = addressStreetInput;
+    if (!firstInvalidAddressField)
+      firstInvalidAddressField = addressStreetInput;
   }
   if (number === "") {
     addressNumberWarn.classList.remove("hidden");
     addressNumberInput.classList.add("border-red-500");
-    if (!firstInvalidAddressField) firstInvalidAddressField = addressNumberInput;
+    if (!firstInvalidAddressField)
+      firstInvalidAddressField = addressNumberInput;
   }
   if (neighborhood === "") {
     addressNeighborhoodWarn.classList.remove("hidden");
     addressNeighborhoodInput.classList.add("border-red-500");
-    if (!firstInvalidAddressField) firstInvalidAddressField = addressNeighborhoodInput;
+    if (!firstInvalidAddressField)
+      firstInvalidAddressField = addressNeighborhoodInput;
   }
 
   if (firstInvalidAddressField) {
@@ -581,34 +602,35 @@ function handleCheckout() {
     fullAddress += ` (Ref: ${reference})`;
   }
 
-  const message = encodeURIComponent(`*Novo Pedido: ${orderId}*\n\nOlá, meu nome é *${customerName}* e gostaria de fazer o seguinte pedido:\n${cartItemsText}\n\nTotal: R$${totalPedido.toFixed(2)}\n\nEndereço de entrega: ${fullAddress}${clientObservations ? `\n\nObservações: ${clientObservations}` : ""}${paymentDetails}`);
+  const message = encodeURIComponent(
+    `*Novo Pedido: ${orderId}*\n\nOlá, meu nome é *${customerName}* e gostaria de fazer o seguinte pedido:\n${cartItemsText}\n\nTotal: R$${totalPedido.toFixed(
+      2
+    )}\n\nEndereço de entrega: ${fullAddress}${
+      clientObservations ? `\n\nObservações: ${clientObservations}` : ""
+    }${paymentDetails}`
+  );
   const whatsappUrl = `https://wa.me/${WHATSAPP_ORDER_PHONE_NUMBER}?text=${message}`;
 
   checkoutBtn.disabled = true;
-  checkoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Enviando seu pedido...';
-
-
-  Toastify({
-    text: "Quase lá! Preparando seu pedido para envio via WhatsApp...",
-    duration: 3500, // Duração um pouco maior
-    close: true,
-    gravity: "top",
-    position: "center", // Centralizado para mais destaque
-    stopOnFocus: true,
-    style: {
-      background: "linear-gradient(to right, #00b09b, #96c93d)",
-    },
-  }).showToast();
+  checkoutBtn.innerHTML =
+    '<i class="fas fa-spinner fa-spin mr-2"></i>Enviando seu pedido...';
 
   setTimeout(() => {
-    window.open(whatsappUrl, "_blank", "noopener noreferrer");
-
-    // Mostra a mensagem de confirmação do pedido dentro do modal
-    // e atualiza o botão de checkout para "Fazer Novo Pedido".
-    showOrderConfirmation(orderId, customerName);
-    // Fecha o modal do carrinho. A função closeCartModal() chamará resetAndStartNewOrder()
-    // (pois a mensagem de confirmação estará visível), resetando o modal.
-    closeCartModal();
+    try {
+      window.open(whatsappUrl, "_blank", "noopener noreferrer");
+      // A chamada para showOrderConfirmation foi removida daqui, o que está correto para o fluxo simplificado.
+    } catch (error) {
+      console.error("Erro ao tentar abrir o link do WhatsApp:", error);
+      // O Toastify de erro foi removido daqui; o finally cuidará da mensagem ao usuário e do reset.
+    } finally {
+      // Independentemente do sucesso ou falha da tentativa de mostrar a confirmação,
+      // o modal deve ser fechado visualmente e seu estado interno completamente resetado.
+      cartModal.style.display = "none"; // Garante que o modal seja fechado visualmente.
+      if (lastFocusedElement) {
+        lastFocusedElement.focus(); // Devolve o foco ao elemento anterior, se houver.
+      }
+      resetAndStartNewOrder(); // Reseta o carrinho, campos e o botão de checkout para "Finalizar pedido".
+    }
   }, 2000); // Pequeno delay para o usuário ver a mensagem/botão desabilitado
 }
 
@@ -645,7 +667,8 @@ function atualizarStatusFuncionamentoHeader() {
   if (!spanTextElement) return;
 
   const isOpen = checkRestaurantOpen();
-  const horarioTextoFechado = "Seg, Qua-Sáb: 19h-23h | Dom: 20h-23h (Terça Fechado)"; // Atualizado para o novo formato
+  const horarioTextoFechado =
+    "Seg, Qua-Sáb: 19h-23h | Dom: 20h-23h (Terça Fechado)"; // Atualizado para o novo formato
   const addToCartButtons = document.querySelectorAll(".add-to-cart-btn");
 
   if (isOpen) {
@@ -653,9 +676,13 @@ function atualizarStatusFuncionamentoHeader() {
     dateSpanElement.classList.add("bg-green-600");
     spanTextElement.textContent = `Aberto Agora`;
 
-    addToCartButtons.forEach(button => {
+    addToCartButtons.forEach((button) => {
       button.disabled = false;
-      button.classList.remove("bg-gray-400", "cursor-not-allowed", "opacity-70");
+      button.classList.remove(
+        "bg-gray-400",
+        "cursor-not-allowed",
+        "opacity-70"
+      );
       button.classList.add("bg-gray-900"); // Restaura a cor original do botão ativo
       // Garante que o ícone também não fique com estilo de desabilitado, se houver
       const icon = button.querySelector("i");
@@ -666,7 +693,7 @@ function atualizarStatusFuncionamentoHeader() {
     dateSpanElement.classList.add("bg-red-500");
     spanTextElement.textContent = `Fechado - ${horarioTextoFechado}`;
 
-    addToCartButtons.forEach(button => {
+    addToCartButtons.forEach((button) => {
       button.disabled = true;
       button.classList.remove("bg-gray-900");
       button.classList.add("bg-gray-400", "cursor-not-allowed", "opacity-70"); // Estilo para desabilitado
@@ -680,7 +707,8 @@ function atualizarStatusFuncionamentoHeader() {
 document.addEventListener("DOMContentLoaded", function () {
   // Adiciona a classe 'loaded' ao body para ativar o efeito de fade-in da página
   checkoutBtn.addEventListener("click", handleCheckout); // Configura o listener inicial
-  checkoutBtn.innerHTML = '<i class="fas fa-share-square mr-2"></i>Finalizar pedido'; // Estado inicial do botão
+  checkoutBtn.innerHTML =
+    '<i class="fas fa-share-square mr-2"></i>Finalizar pedido'; // Estado inicial do botão
 
   document.body.classList.add("loaded");
 
