@@ -38,7 +38,7 @@ const orderCustomerNameDisplay = document.getElementById(
 );
 // Número de WhatsApp para onde os PEDIDOS serão enviados.
 // Formato internacional: +55 (DDD sem o zero) (Número)
-const WHATSAPP_ORDER_PHONE_NUMBER = "5535999486054"; // Número de WhatsApp do Mega Dogão (sem o +)
+const WHATSAPP_ORDER_PHONE_NUMBER = "+5535999486054"; // Número de WhatsApp do Mega Dogão (sem o +)
 
 const PIX_KEY_VALUE = "(24)993133495"; // Chave PIX para pagamento (formato de exibição)
 
@@ -602,18 +602,25 @@ function handleCheckout() {
     fullAddress += ` (Ref: ${reference})`;
   }
 
-  const message = encodeURIComponent(
-    `*Novo Pedido: ${orderId}*\n\nOlá, meu nome é *${customerName}* e gostaria de fazer o seguinte pedido:\n${cartItemsText}\n\nTotal: R$${totalPedido.toFixed(
-      2
-    )}\n\nEndereço de entrega: ${fullAddress}${
-      clientObservations ? `\n\nObservações: ${clientObservations}` : ""
-    }${paymentDetails}`
-  );
-  const whatsappUrl = `https://wa.me/${WHATSAPP_ORDER_PHONE_NUMBER}?text=${message}`;
+  // --- INÍCIO DA MODIFICAÇÃO PARA TESTE ---
+  // 1. Mensagem original (comente para testar a mensagem curta)
+  // const originalMessageText = `*Novo Pedido: ${orderId}*\n\nOlá, meu nome é *${customerName}* e gostaria de fazer o seguinte pedido:\n${cartItemsText}\n\nTotal: R$${totalPedido.toFixed(2)}\n\nEndereço de entrega: ${fullAddress}${clientObservations ? `\n\nObservações: ${clientObservations}` : ""}${paymentDetails}`;
+  // const message = encodeURIComponent(originalMessageText);
 
+  // 2. Mensagem de teste curta (descomente para testar)
+  const testMessageText = `Teste de Pedido: ${orderId} - Olá ${customerName}`;
+  const message = encodeURIComponent(testMessageText);
+
+  // Imprime a mensagem decodificada e o URL completo no console para depuração
+  // console.log("Mensagem Decodificada:", decodeURIComponent(message)); // Use originalMessageText ou testMessageText aqui
+  console.log("Mensagem Decodificada:", testMessageText); // Para o teste curto
+  // --- FIM DA MODIFICAÇÃO PARA TESTE ---
+
+  const whatsappUrl = `https://wa.me/${WHATSAPP_ORDER_PHONE_NUMBER}?text=${message}`;
   checkoutBtn.disabled = true;
   checkoutBtn.innerHTML =
     '<i class="fas fa-spinner fa-spin mr-2"></i>Enviando seu pedido...';
+  console.log("URL WhatsApp:", whatsappUrl); // Adicionado para depuração
 
   setTimeout(() => {
     try {
