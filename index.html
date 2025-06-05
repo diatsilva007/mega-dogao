@@ -40,6 +40,8 @@
         content="Experimente os cachorros-quentes deliciosos e recheados do Mega Dogão carioca! O verdadeiro sabor carioca.">
     <meta property="og:site_name" content="Mega Dogão carioca">
 
+    <meta name="description" content="Peça os melhores cachorros-quentes do Mega Dogão carioca! Cardápio variado, entrega rápida e o sabor que você adora.">
+
     <link rel="stylesheet" href="./styles/output.css">
 
     <title>Mega Dogão carioca - O melhor cachorro-quente da cidade!</title>
@@ -410,7 +412,7 @@
                         <div id="cart-items" class="space-y-4"></div>
 
                         <div>
-                            <p class="font-bold text-lg">Total: <span id="cart-total">0.00</span></p>
+                            <p class="font-bold text-lg">Total: <span id="cart-total" aria-live="polite">0.00</span></p>
                         </div>
 
                         <div class="space-y-3 mt-4">
@@ -418,8 +420,9 @@
                                 <label for="customer-name" class="font-bold block mb-1">Seu Nome: <span
                                         class="text-red-500">*</span></label>
                                 <input type="text" placeholder="Digite seu nome completo..." id="customer-name"
+                                    aria-required="true"
                                     class="w-full border-2 p-2 rounded-md my-1 focus:border-red-500 focus:ring-1 focus:ring-red-300 transition-colors" />
-                                <p class="text-red-500 text-sm hidden mt-1" id="customer-name-warn">☝️ Por favor,
+                                <p class="text-red-500 text-sm hidden mt-1" id="customer-name-warn" role="alert">☝️ Por favor,
                                     informe seu nome.</p>
                             </div>
                             <!-- Campos de Endereço Detalhados -->
@@ -430,8 +433,9 @@
                                     <label for="address-street" class="text-sm font-medium text-gray-700">Rua/Avenida:
                                         <span class="text-red-500">*</span></label>
                                     <input type="text" placeholder="Ex: Rua Principal" id="address-street"
+                                        aria-required="true"
                                         class="w-full border-2 p-2 rounded-md my-1 focus:border-red-500 focus:ring-1 focus:ring-red-300 transition-colors" />
-                                    <p class="text-red-500 text-sm hidden mt-1" id="address-street-warn">☝️ Informe a
+                                    <p class="text-red-500 text-sm hidden mt-1" id="address-street-warn" role="alert">☝️ Informe a
                                         rua/avenida.</p>
                                 </div>
                                 <div class="grid grid-cols-2 gap-3">
@@ -439,21 +443,22 @@
                                         <label for="address-number" class="text-sm font-medium text-gray-700">Número:
                                             <span class="text-red-500">*</span></label>
                                         <input type="text" inputmode="numeric" placeholder="Digite seu número"
-                                            id="address-number"
+                                            id="address-number" aria-required="true"
                                             class="w-full border-2 p-2 rounded-md my-1 focus:border-red-500 focus:ring-1 focus:ring-red-300 transition-colors" />
-                                        <p class="text-red-500 text-sm hidden mt-1" id="address-number-warn">☝️ Informe
+                                        <p class="text-red-500 text-sm hidden mt-1" id="address-number-warn" role="alert">☝️ Informe
                                             o número.</p>
                                     </div>
                                     <div>
                                         <label for="address-neighborhood"
                                             class="text-sm font-medium text-gray-700">Bairro: <span
                                                 class="text-red-500">*</span></label>
-                                        <input type="text" placeholder="Ex: Centro" id="address-neighborhood"
+                                        <input type="text" placeholder="Ex: Centro" id="address-neighborhood" aria-required="true"
                                             class="w-full border-2 p-2 rounded-md my-1 focus:border-red-500 focus:ring-1 focus:ring-red-300 transition-colors" />
-                                        <p class="text-red-500 text-sm hidden mt-1" id="address-neighborhood-warn">☝️
+                                        <p class="text-red-500 text-sm hidden mt-1" id="address-neighborhood-warn" role="alert">☝️
                                             Informe o bairro.</p>
                                     </div>
                                 </div>
+                                <!-- Campos opcionais não precisam de aria-required -->
                                 <input type="text" placeholder="Complemento (Apto, Bloco, Casa - Opcional)"
                                     id="address-complement"
                                     class="w-full border-2 p-2 rounded-md my-1 focus:border-red-500 focus:ring-1 focus:ring-red-300 transition-colors" />
@@ -536,7 +541,7 @@
                                 </label>
                             </div>
                         </div>
-                        <p class="text-red-500 text-sm hidden mt-2" id="payment-warn">☝️ Selecione uma forma de
+                        <p class="text-red-500 text-sm hidden mt-2" id="payment-warn" role="alert">☝️ Selecione uma forma de
                             pagamento</p>
                     </div>
                     <!-- Fim Formas de Pagamento -->
@@ -562,7 +567,7 @@
         <footer
             class="w-full bg-red-500 py-3 fixed bottom-0 z-40 flex items-center justify-center px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20">
             <button class="flex items-center gap-2 text-white font-bold whitespace-nowrap" id="cart-btn">
-                (<span id="cart-count">0</span>)
+                (<span id="cart-count" aria-live="polite">0</span>)
                 Veja meu carrinho
                 <i class="fa fa-cart-plus text-lg text-white"></i>
             </button>
