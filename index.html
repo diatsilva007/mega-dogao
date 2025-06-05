@@ -419,8 +419,8 @@
                                     <div>
                                         <label for="address-number" class="text-sm font-medium text-gray-700">Número:
                                             <span class="text-red-500">*</span></label>
-                                        <input type="text" placeholder="Ex: 123" id="address-number"
-                                            class="w-full border-2 p-2 rounded-md my-1 focus:border-red-500 focus:ring-1 focus:ring-red-300 transition-colors" />
+                                        <input type="text" inputmode="numeric" placeholder="Digite seu número" id="address-number"
+                                               class="w-full border-2 p-2 rounded-md my-1 focus:border-red-500 focus:ring-1 focus:ring-red-300 transition-colors" />
                                         <p class="text-red-500 text-sm hidden mt-1" id="address-number-warn">☝️ Informe
                                             o número.</p>
                                     </div>
@@ -461,7 +461,7 @@
                                     </label>
                                     <!-- Wrapper para o input de troco para controlar o layout corretamente -->
                                     <div class="mt-2 ml-8">
-                                        <input type="text" id="troco-input" autocomplete="off" inputmode="decimal"
+                                        <input type="text" id="troco-input" autocomplete="off" inputmode="numeric"
                                             placeholder="Pagar com qual valor? Ex: 50 (Opcional)"
                                             class="w-full border-2 p-2 rounded-md text-sm hidden focus:border-red-500 focus:ring-1 focus:ring-red-300 transition-colors">
                                     </div>
