@@ -328,9 +328,9 @@ document.querySelectorAll('input[name="payment-method"]').forEach((radio) => {
 });
 
 function generateOrderId() {
-  const timestamp = Date.now();
-  const randomNumber = Math.floor(Math.random() * 1000);
-  return `MD-${timestamp}-${randomNumber}`; // MD para Mega Dogão
+  // Gera um número aleatório entre 1000 e 9999
+  const randomNumber = Math.floor(1000 + Math.random() * 9000);
+  return `MD-${randomNumber}`; // MD para Mega Dogão, seguido de um número de 4 dígitos
 }
 
 // Antes (aproximadamente linha 346):
