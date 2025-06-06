@@ -724,6 +724,45 @@ function handleCheckout() {
   // console.log("Mensagem Decodificada:", testMessageText);
   // --- FIM DA MODIFICAÇÃO PARA TESTE ---
 
+  // --- INÍCIO DO CÓDIGO PARA ENVIAR DADOS PARA A PLANILHA ---
+  const orderData = {
+    orderId: orderId, // Certifique-se que orderId está definido e sendo gerado
+    timestamp: new Date().toISOString(),
+    customerName: customerName,
+    items: cart.map(item => ({
+      name: item.name,
+      quantity: item.quantity,
+      price: parseFloat(item.price) // Garante que o preço é um número
+    })),
+    totalAmount: parseFloat(totalPedido), // Garante que totalPedido é um número
+    address: fullAddress,
+    paymentMethod: paymentMethodValue,
+    paymentDetails: paymentDetails.replace(/\nForma de Pagamento:.*$/, '').trim(), // Remove a parte "Forma de Pagamento" que já vai em outro campo
+    observations: clientObservations
+  };
+
+  // !!! SUBSTITUA PELA URL DO SEU APP DA WEB OBTIDA NO PASSO ANTERIOR !!!
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzbMHtJTm5YKv37wbeA9ElldxjfxNshQHcSzyp-FQEmB5T4iIMUr7_X_cn4M1HfALMB/exec";
+
+  fetch(GOOGLE_SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors', // 'no-cors' é usado para evitar problemas de CORS.
+                    // O cliente não receberá uma resposta detalhada do servidor,
+                    // mas o POST será enviado.
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'text/plain',
+    },
+    body: JSON.stringify(orderData) // O corpo da requisição é a string JSON dos dados do pedido
+  })
+  .then(() => {
+    console.log('Tentativa de envio dos dados do pedido para a planilha realizada.');
+  })
+  .catch(error => {
+    console.error('Erro ao tentar enviar dados do pedido para a planilha:', error);
+  });
+  // --- FIM DO CÓDIGO PARA ENVIAR DADOS PARA A PLANILHA ---
+
   const whatsappUrl = `https://wa.me/${WHATSAPP_ORDER_PHONE_NUMBER}?text=${message}`;
   checkoutBtn.disabled = true;
   checkoutBtn.innerHTML =
