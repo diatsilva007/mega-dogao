@@ -45,6 +45,110 @@ const PIX_KEY_VALUE = "(24)993133495"; // Chave PIX para pagamento (formato de e
 let cart = [];
 let lastFocusedElement;
 
+// Definição dos horários de funcionamento
+// 0: Domingo, 1: Segunda, ..., 6: Sábado
+// As horas são em formato 24h (ex: 19 para 19:00, 23 para 23:00)
+const operatingHours = {
+  0: { open: 20, close: 23 }, // Domingo: 20:00 - 23:00
+  1: { open: 19, close: 23 }, // Segunda: 19:00 - 23:00
+  2: null, // Terça: Fechado
+  3: { open: 19, close: 23 }, // Quarta: 19:00 - 23:00
+  4: { open: 19, close: 23 }, // Quinta: 19:00 - 23:00
+  5: { open: 19, close: 23 }, // Sexta: 19:00 - 23:00
+  6: { open: 19, close: 23 }, // Sábado: 19:00 - 23:00
+};
+
+/**
+ * Agenda a atualização da página para o próximo horário de abertura ou fechamento.
+ */
+function schedulePageRefresh() {
+  const now = new Date();
+  let nextEventTime = null;
+  let eventDescription = "";
+
+  for (let i = 0; i < 7; i++) {
+    const checkDate = new Date(now);
+    checkDate.setDate(now.getDate() + i);
+    checkDate.setMilliseconds(0);
+
+    const dayIndex = checkDate.getDay();
+    const schedule = operatingHours[dayIndex];
+
+    if (schedule) {
+      const openingTimeThisDay = new Date(
+        checkDate.getFullYear(),
+        checkDate.getMonth(),
+        checkDate.getDate(),
+        schedule.open,
+        0,
+        0,
+        0
+      );
+      const closingTimeThisDay = new Date(
+        checkDate.getFullYear(),
+        checkDate.getMonth(),
+        checkDate.getDate(),
+        schedule.close,
+        0,
+        0,
+        0
+      );
+
+      if (openingTimeThisDay > now) {
+        if (!nextEventTime || openingTimeThisDay < nextEventTime) {
+          nextEventTime = openingTimeThisDay;
+          eventDescription = `abertura em ${openingTimeThisDay.toLocaleString()}`;
+        }
+      }
+      if (closingTimeThisDay > now) {
+        if (!nextEventTime || closingTimeThisDay < nextEventTime) {
+          nextEventTime = closingTimeThisDay;
+          eventDescription = `fechamento em ${closingTimeThisDay.toLocaleString()}`;
+        }
+      }
+    }
+    if (
+      nextEventTime &&
+      new Date(
+        checkDate.getFullYear(),
+        checkDate.getMonth(),
+        checkDate.getDate(),
+        0,
+        0,
+        0,
+        0
+      ) >
+        new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate(),
+          0,
+          0,
+          0,
+          0
+        ) &&
+      nextEventTime > now
+    )
+      break; // Otimização: se já encontrou um evento para hoje ou amanhã, não precisa checar os 7 dias.
+  }
+
+  if (nextEventTime) {
+    const delay = nextEventTime.getTime() - now.getTime();
+    console.log(
+      `Página será atualizada para o(a) ${eventDescription}. Tempo restante: ${Math.round(
+        delay / 1000 / 60
+      )} minutos.`
+    );
+    setTimeout(() => {
+      location.reload();
+    }, delay);
+  } else {
+    console.log(
+      "Não foi possível determinar o próximo horário para atualização. Verifique a configuração de 'operatingHours'."
+    );
+  }
+}
+
 function closeCartModal() {
   cartModal.style.display = "none";
   if (lastFocusedElement) {
@@ -604,7 +708,11 @@ function handleCheckout() {
 
   // --- INÍCIO DA MODIFICAÇÃO PARA TESTE ---
   // 1. Mensagem original (descomentada para uso normal)
-  const originalMessageText = `*Novo Pedido: ${orderId}*\n\nOlá, meu nome é *${customerName}* e gostaria de fazer o seguinte pedido:\n${cartItemsText}\n\nTotal: R$${totalPedido.toFixed(2)}\n\nEndereço de entrega: ${fullAddress}${clientObservations ? `\n\nObservações: ${clientObservations}` : ""}${paymentDetails}`;
+  const originalMessageText = `*Novo Pedido: ${orderId}*\n\nOlá, meu nome é *${customerName}* e gostaria de fazer o seguinte pedido:\n${cartItemsText}\n\nTotal: R$${totalPedido.toFixed(
+    2
+  )}\n\nEndereço de entrega: ${fullAddress}${
+    clientObservations ? `\n\nObservações: ${clientObservations}` : ""
+  }${paymentDetails}`;
   const message = encodeURIComponent(originalMessageText);
 
   // 2. Mensagem de teste (comentada)
@@ -726,6 +834,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   atualizarStatusFuncionamentoHeader(); // Chama uma vez na carga
   setInterval(atualizarStatusFuncionamentoHeader, 60000); // Atualiza a cada minuto
+  schedulePageRefresh(); // Agenda a atualização da página com base no horário de funcionamento
 
   // Lógica para o Botão "Voltar ao Topo"
   const backToTopButton = document.getElementById("back-to-top-btn");
