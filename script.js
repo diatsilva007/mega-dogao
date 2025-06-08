@@ -711,7 +711,7 @@ function handleCheckout() {
   const originalMessageText = `*Novo Pedido: ${orderId}*\n\nOlá, meu nome é *${customerName}* e gostaria de fazer o seguinte pedido:\n${cartItemsText}\n\nTotal: R$${totalPedido.toFixed(
     2
   )}\n\nEndereço de entrega: ${fullAddress}${
-    clientObservations ? `\n\nObservações: ${clientObservations}\n\n` : ""
+    clientObservations ? `\n\nObservações: ${clientObservations}\n` : ""
   }${paymentDetails}`;
   const message = encodeURIComponent(originalMessageText);
 
